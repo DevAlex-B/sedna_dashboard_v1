@@ -16,7 +16,7 @@ export default function Sidebar() {
   return (
     <motion.aside
       animate={{ width: collapsed ? 72 : 240 }}
-      className="h-screen bg-[#2e353b] text-white flex flex-col"
+      className="h-full bg-gray-100 text-gray-900 dark:bg-[#2e353b] dark:text-white flex flex-col"
     >
       <button
         className="p-4 focus:outline-none"

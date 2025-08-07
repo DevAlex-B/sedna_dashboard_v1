@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 export default function PageContainer({ children }) {
   return (
     <motion.main
-      className="flex-1 p-6 bg-gray-100 dark:bg-gray-900"
+      className="flex-1 p-6 bg-gradient-light dark:bg-gradient-dark"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
