@@ -8,8 +8,10 @@ module.exports = {
         secondary: '#e16f3d',
       },
       backgroundImage: {
-        'gradient-light': 'linear-gradient(to bottom right, #ffffff, #f7f9fc, #e8eef5)',
-        'gradient-dark': 'radial-gradient(circle at top left, #036EC8 5%, #2e353b 30%, #1a1d20 100%)',
+        'gradient-light':
+          'radial-gradient(circle at top left, #036EC8 0%, #f7f9fc 50%, #ffffff 100%)',
+        'gradient-dark':
+          'radial-gradient(circle at top left, #036EC8 0%, #2e353b 50%, #1a1d20 100%)',
       },
     },
   },
