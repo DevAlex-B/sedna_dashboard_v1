@@ -1,0 +1,21 @@
+{
+  "uptime": [
+    {"time": "Mon", "value": 98},
+    {"time": "Tue", "value": 96},
+    {"time": "Wed", "value": 97},
+    {"time": "Thu", "value": 93},
+    {"time": "Fri", "value": 95}
+  ],
+  "output": [
+    {"label": "Pump A", "value": 80},
+    {"label": "Pump B", "value": 60},
+    {"label": "Pump C", "value": 90},
+    {"label": "Pump D", "value": 70}
+  ],
+  "statuses": [
+    {"equipment": "Pump A", "status": "Online", "temp": 68},
+    {"equipment": "Pump B", "status": "Maintenance", "temp": null},
+    {"equipment": "Pump C", "status": "Online", "temp": 72},
+    {"equipment": "Pump D", "status": "Offline", "temp": null}
+  ]
+}
