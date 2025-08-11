@@ -47,6 +47,7 @@ export default function FeedToPlantChart({ range }) {
             borderColor: theme === 'dark' ? '#34d399' : '#2563eb',
             backgroundColor: 'transparent',
             tension: 0.4,
+            pointRadius: 0,
           },
         ],
       },
