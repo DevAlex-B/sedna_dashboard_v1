@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import Chart from '../chart';
 
 export default function FeedToPlantChart({ range }) {
   const canvasRef = useRef(null);
@@ -40,68 +41,57 @@ export default function FeedToPlantChart({ range }) {
   }, [range]);
 
   useEffect(() => {
-    if (!window.Chart) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (!ctx) return;
+
     const labels = data.map((d) => d.time);
     const values = data.map((d) => d.value);
-    const ctx = canvasRef.current.getContext('2d');
-    if (!chartRef.current) {
-      chartRef.current = new window.Chart(ctx, {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            {
-              data: values,
-              borderColor: '#036EC8',
-              backgroundColor: 'transparent',
-              tension: 0.4,
-              pointRadius: 0,
+
+    chartRef.current?.destroy();
+    chartRef.current = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            data: values,
+            borderColor: '#036EC8',
+            backgroundColor: 'transparent',
+            tension: 0.4,
+            pointRadius: 0,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 500, easing: 'easeOutQuart' },
+        plugins: { legend: { display: false } },
+        scales: {
+          x: {
+            ticks: {
+              color: theme === 'dark' ? '#e5e7eb' : '#374151',
+              maxTicksLimit: Math.ceil(labels.length / 2),
             },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: { duration: 500, easing: 'easeOutQuart' },
-          plugins: { legend: { display: false } },
-          scales: {
-            x: {
-              ticks: {
-                color: theme === 'dark' ? '#e5e7eb' : '#374151',
-                maxTicksLimit: Math.ceil(labels.length / 2),
-              },
-              grid: { display: false },
-            },
-            y: {
-              ticks: { color: theme === 'dark' ? '#e5e7eb' : '#374151' },
-              grid: { color: theme === 'dark' ? '#374151' : '#e5e7eb' },
-            },
+            grid: { display: false },
+          },
+          y: {
+            ticks: { color: theme === 'dark' ? '#e5e7eb' : '#374151' },
+            grid: { color: theme === 'dark' ? '#374151' : '#e5e7eb' },
           },
         },
-      });
-    } else {
-      const chart = chartRef.current;
-      chart.data.labels = labels;
-      chart.data.datasets[0].data = values;
-      chart.options.scales.x.ticks.color =
-        theme === 'dark' ? '#e5e7eb' : '#374151';
-      chart.options.scales.x.ticks.maxTicksLimit = Math.ceil(labels.length / 2);
-      chart.options.scales.y.ticks.color =
-        theme === 'dark' ? '#e5e7eb' : '#374151';
-      chart.options.scales.y.grid.color =
-        theme === 'dark' ? '#374151' : '#e5e7eb';
-      chart.update();
-    }
+      },
+    });
+
+    return () => {
+      chartRef.current?.destroy();
+      chartRef.current = null;
+    };
   }, [data, theme]);
 
-  useEffect(() => {
-    return () => {
-      if (chartRef.current) chartRef.current.destroy();
-    };
-  }, []);
-
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-72">
       <canvas ref={canvasRef} />
     </div>
   );

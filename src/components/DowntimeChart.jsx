@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import Chart from '../chart';
 
 export default function DowntimeChart({ data }) {
   const canvasRef = useRef(null);
@@ -7,11 +8,7 @@ export default function DowntimeChart({ data }) {
   const { theme } = useTheme();
 
   useEffect(() => {
-    if (!window.Chart) return;
     if (!data.length) return;
-    if (window.ChartDataLabels && !window.Chart.registry.plugins.get('datalabels')) {
-      window.Chart.register(window.ChartDataLabels);
-    }
 
     const latest = data[0];
     const parseHours = (start, end) => {
@@ -33,60 +30,55 @@ export default function DowntimeChart({ data }) {
     const operational = Math.max(24 - planned - unplanned, 0);
     const values = [operational, planned, unplanned];
 
-    const ctx = canvasRef.current.getContext('2d');
-    if (!chartRef.current) {
-      chartRef.current = new window.Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: ['Operational Time', 'Planned Downtime', 'Unplanned Downtime'],
-          datasets: [
-            {
-              data: values,
-              backgroundColor: ['#22c55e', '#f59e0b', '#ef4444'],
-              borderWidth: 0,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: { duration: 500, easing: 'easeOutQuart' },
-          plugins: {
-            legend: {
-              position: 'top',
-              labels: {
-                color: theme === 'dark' ? '#e5e7eb' : '#374151',
-              },
-            },
-            datalabels: {
-              color: '#fff',
-              formatter: (value, ctx) => {
-                const dataset = ctx.chart.data.datasets[0].data;
-                const total = dataset.reduce((a, b) => a + b, 0);
-                return total ? `${Math.round((value / total) * 100)}%` : '0%';
-              },
-              font: { weight: 'bold' },
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (!ctx) return;
+
+    chartRef.current?.destroy();
+    chartRef.current = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Operational Time', 'Planned Downtime', 'Unplanned Downtime'],
+        datasets: [
+          {
+            data: values,
+            backgroundColor: ['#22c55e', '#f59e0b', '#ef4444'],
+            borderWidth: 0,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 500, easing: 'easeOutQuart' },
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              color: theme === 'dark' ? '#e5e7eb' : '#374151',
             },
           },
+          datalabels: {
+            color: '#fff',
+            formatter: (value, ctx) => {
+              const dataset = ctx.chart.data.datasets[0].data;
+              const total = dataset.reduce((a, b) => a + b, 0);
+              return total ? `${Math.round((value / total) * 100)}%` : '0%';
+            },
+            font: { weight: 'bold' },
+          },
         },
-      });
-    } else {
-      const chart = chartRef.current;
-      chart.data.datasets[0].data = values;
-      chart.options.plugins.legend.labels.color =
-        theme === 'dark' ? '#e5e7eb' : '#374151';
-      chart.update();
-    }
+      },
+    });
+
+    return () => {
+      chartRef.current?.destroy();
+      chartRef.current = null;
+    };
   }, [data, theme]);
 
-  useEffect(() => {
-    return () => {
-      if (chartRef.current) chartRef.current.destroy();
-    };
-  }, []);
-
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-72">
       <canvas ref={canvasRef} />
     </div>
   );
