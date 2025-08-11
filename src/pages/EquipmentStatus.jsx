@@ -45,7 +45,7 @@ export default function EquipmentStatus() {
         <div className="grid flex-1 grid-cols-3 grid-rows-2 gap-4 min-h-0">
           <div className={`col-span-2 ${panelClasses} flex flex-col`}>
             <h2 className="mb-2 font-medium">Feed to plant</h2>
-            <div className="flex-1">
+            <div className="flex-1 h-full min-h-0">
               <FeedToPlantChart range={range} />
             </div>
           </div>
@@ -55,7 +55,7 @@ export default function EquipmentStatus() {
           </div>
           <div className={`col-span-1 ${panelClasses} flex flex-col`}>
             <h2 className="mb-2 font-medium">Downtime</h2>
-            <div className="flex-1">
+            <div className="flex-1 h-full min-h-0">
               <DowntimeChart data={data} />
             </div>
           </div>
