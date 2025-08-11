@@ -9,8 +9,11 @@ export default function DowntimeChart({ data }) {
   useEffect(() => {
     if (!window.Chart) return;
     if (!data.length) return;
+    if (window.ChartDataLabels && !window.Chart.registry.plugins.get('datalabels')) {
+      window.Chart.register(window.ChartDataLabels);
+    }
 
-      const latest = data[0];
+    const latest = data[0];
     const parseHours = (start, end) => {
       if (!start || !end) return 0;
       const s = new Date(`1970-01-01T${start}Z`);
@@ -28,17 +31,18 @@ export default function DowntimeChart({ data }) {
       latest.unplanned_downtime_end
     );
     const operational = Math.max(24 - planned - unplanned, 0);
+    const values = [operational, planned, unplanned];
 
     const ctx = canvasRef.current.getContext('2d');
-    if (chartRef.current) chartRef.current.destroy();
-    chartRef.current = new window.Chart(ctx, {
-      type: 'doughnut',
+    if (!chartRef.current) {
+      chartRef.current = new window.Chart(ctx, {
+        type: 'pie',
         data: {
           labels: ['Operational Time', 'Planned Downtime', 'Unplanned Downtime'],
           datasets: [
             {
-              data: [operational, planned, unplanned],
-              backgroundColor: ['#036EC8', '#e16f3d', '#ef4444'],
+              data: values,
+              backgroundColor: ['#22c55e', '#f59e0b', '#ef4444'],
               borderWidth: 0,
             },
           ],
@@ -46,22 +50,44 @@ export default function DowntimeChart({ data }) {
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          animation: { duration: 500, easing: 'easeOutQuart' },
           plugins: {
             legend: {
-              position: 'bottom',
+              position: 'top',
               labels: {
                 color: theme === 'dark' ? '#e5e7eb' : '#374151',
               },
             },
+            datalabels: {
+              color: '#fff',
+              formatter: (value, ctx) => {
+                const dataset = ctx.chart.data.datasets[0].data;
+                const total = dataset.reduce((a, b) => a + b, 0);
+                return total ? `${Math.round((value / total) * 100)}%` : '0%';
+              },
+              font: { weight: 'bold' },
+            },
           },
-          animation: { duration: 500, easing: 'easeOutQuart' },
         },
       });
+    } else {
+      const chart = chartRef.current;
+      chart.data.datasets[0].data = values;
+      chart.options.plugins.legend.labels.color =
+        theme === 'dark' ? '#e5e7eb' : '#374151';
+      chart.update();
+    }
+  }, [data, theme]);
 
+  useEffect(() => {
     return () => {
       if (chartRef.current) chartRef.current.destroy();
     };
-  }, [data, theme]);
+  }, []);
 
-  return <canvas ref={canvasRef} className="w-full h-full" />;
+  return (
+    <div className="relative w-full h-full">
+      <canvas ref={canvasRef} />
+    </div>
+  );
 }
