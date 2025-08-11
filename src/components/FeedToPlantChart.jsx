@@ -8,73 +8,85 @@ export default function FeedToPlantChart({ range }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const end = new Date();
-      const start = new Date(end);
-      if (range.unit === 'hour') {
-        start.setHours(end.getHours() - range.value);
-      } else {
-        start.setDate(end.getDate() - range.value);
-      }
-      try {
-        const res = await fetch(
-          `/api/feed_to_plant.php?start=${start.toISOString()}&end=${end.toISOString()}`
-        );
-        const json = await res.json();
-        setData(json);
-      } catch (e) {
-        console.error(e);
-      }
-    };
+      const fetchData = async () => {
+        const end = new Date();
+        const start = new Date(end);
+        if (range.unit === 'hour') {
+          start.setHours(end.getHours() - range.value);
+        } else {
+          start.setDate(end.getDate() - range.value);
+        }
+        try {
+          const res = await fetch(
+            `/api/feed_to_plant.php?start=${start.toISOString()}&end=${end.toISOString()}`
+          );
+          const json = await res.json();
+          const maxPoints =
+            range.unit === 'hour' && range.value === 1
+              ? 60
+              : range.unit === 'hour' && range.value === 24
+              ? 48
+              : range.unit === 'day' && range.value === 7
+              ? 7
+              : json.length;
+          const step = Math.ceil(json.length / maxPoints);
+          const sampled = json.filter((_, i) => i % step === 0).slice(-maxPoints);
+          setData(sampled);
+        } catch (e) {
+          console.error(e);
+        }
+      };
     fetchData();
   }, [range]);
 
   useEffect(() => {
     if (!window.Chart) return;
-    const labels = data.map((d) => d.time);
-    const values = data.map((d) => d.value);
-    const ctx = canvasRef.current.getContext('2d');
-    if (chartRef.current) {
-      chartRef.current.destroy();
-    }
-    chartRef.current = new window.Chart(ctx, {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          {
-            data: values,
-            borderColor: theme === 'dark' ? '#34d399' : '#2563eb',
-            backgroundColor: 'transparent',
-            tension: 0.4,
-            pointRadius: 0,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        animation: { duration: 500, easing: 'easeOutQuart' },
-        plugins: { legend: { display: false } },
-        scales: {
-          x: {
-            ticks: {
-              color: theme === 'dark' ? '#e5e7eb' : '#374151',
+      const labels = data.map((d) => d.time);
+      const values = data.map((d) => d.value);
+      const ctx = canvasRef.current.getContext('2d');
+      if (chartRef.current) {
+        chartRef.current.destroy();
+      }
+      chartRef.current = new window.Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              data: values,
+              borderColor: '#036EC8',
+              backgroundColor: 'transparent',
+              tension: 0.4,
+              pointRadius: 0,
             },
-            grid: {
-              color: theme === 'dark' ? '#374151' : '#e5e7eb',
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 500, easing: 'easeOutQuart' },
+          plugins: { legend: { display: false } },
+          scales: {
+            x: {
+              ticks: {
+                color: theme === 'dark' ? '#e5e7eb' : '#374151',
+                maxTicksLimit: Math.ceil(labels.length / 2),
+              },
+              grid: {
+                display: false,
+              },
             },
-          },
-          y: {
-            ticks: {
-              color: theme === 'dark' ? '#e5e7eb' : '#374151',
-            },
-            grid: {
-              color: theme === 'dark' ? '#374151' : '#e5e7eb',
+            y: {
+              ticks: {
+                color: theme === 'dark' ? '#e5e7eb' : '#374151',
+              },
+              grid: {
+                color: theme === 'dark' ? '#374151' : '#e5e7eb',
+              },
             },
           },
         },
-      },
-    });
+      });
     return () => {
       if (chartRef.current) chartRef.current.destroy();
     };

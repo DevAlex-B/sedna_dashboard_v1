@@ -10,7 +10,7 @@ export default function DowntimeChart({ data }) {
     if (!window.Chart) return;
     if (!data.length) return;
 
-    const latest = data[0];
+      const latest = data[0];
     const parseHours = (start, end) => {
       if (!start || !end) return 0;
       const s = new Date(`1970-01-01T${start}Z`);
@@ -33,31 +33,30 @@ export default function DowntimeChart({ data }) {
     if (chartRef.current) chartRef.current.destroy();
     chartRef.current = new window.Chart(ctx, {
       type: 'doughnut',
-      data: {
-        labels: ['Operational Time', 'Planned Downtime', 'Unplanned Downtime'],
-        datasets: [
-          {
-            data: [operational, planned, unplanned],
-            backgroundColor: [
-              theme === 'dark' ? '#34d399' : '#10b981',
-              '#f59e0b',
-              '#ef4444',
-            ],
-            borderWidth: 0,
-          },
-        ],
-      },
-      options: {
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: {
-              color: theme === 'dark' ? '#e5e7eb' : '#374151',
+        data: {
+          labels: ['Operational Time', 'Planned Downtime', 'Unplanned Downtime'],
+          datasets: [
+            {
+              data: [operational, planned, unplanned],
+              backgroundColor: ['#036EC8', '#e16f3d', '#ef4444'],
+              borderWidth: 0,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: theme === 'dark' ? '#e5e7eb' : '#374151',
+              },
             },
           },
+          animation: { duration: 500, easing: 'easeOutQuart' },
         },
-      },
-    });
+      });
 
     return () => {
       if (chartRef.current) chartRef.current.destroy();

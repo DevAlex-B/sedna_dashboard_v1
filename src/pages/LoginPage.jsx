@@ -1,7 +1,9 @@
 
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function FloatingPaths({ position }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -51,10 +53,44 @@ function FloatingPaths({ position }) {
 
 export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [msg, setMsg] = useState(null);
+  const [msgType, setMsgType] = useState('');
+  const navigate = useNavigate();
+  const { login, user } = useAuth();
+
+  useEffect(() => {
+    if (user) navigate('/equipment-location');
+  }, [user, navigate]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const res = login(username, password, rememberMe);
+    if (res.success) {
+      setMsg('Logged in successfully');
+      setMsgType('success');
+      setTimeout(() => navigate('/equipment-location'), 500);
+    } else {
+      setMsg(res.message);
+      setMsgType('error');
+    }
+  };
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-[#20252A]">
-      {/* Background Animation */}
+      <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-[#20252A]">
+        {msg && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`absolute top-4 right-4 px-4 py-2 rounded shadow-lg text-white ${
+              msgType === 'success' ? 'bg-green-600' : 'bg-red-600'
+            }`}
+          >
+            {msg}
+          </motion.div>
+        )}
+        {/* Background Animation */}
       <div className="absolute inset-0">
         <FloatingPaths position={1} />
         <FloatingPaths position={-1} />
@@ -75,36 +111,40 @@ export default function LoginPage() {
           Sign in to continue
         </p>
 
-        <form className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
           {/* Username */}
           <div>
             <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">
               Username
             </label>
-            <input
-              type="text"
-              placeholder="Enter your username"
-              className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20 
-              bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white 
-              focus:ring-2 focus:ring-[#036EC9] focus:border-[#036EC9] outline-none 
-              placeholder-gray-500 dark:placeholder-gray-400"
-            />
-          </div>
+              <input
+                type="text"
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20
+                bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white
+                focus:ring-2 focus:ring-main focus:border-main outline-none
+                placeholder-gray-500 dark:placeholder-gray-400"
+              />
+            </div>
 
           {/* Password */}
           <div>
             <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">
               Password
             </label>
-            <input
-              type="password"
-              placeholder="Enter your password"
-              className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20 
-              bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white 
-              focus:ring-2 focus:ring-[#036EC9] focus:border-[#036EC9] outline-none 
-              placeholder-gray-500 dark:placeholder-gray-400"
-            />
-          </div>
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20
+                bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white
+                focus:ring-2 focus:ring-main focus:border-main outline-none
+                placeholder-gray-500 dark:placeholder-gray-400"
+              />
+            </div>
 
           {/* Remember Me */}
           <div className="flex items-center">
@@ -124,16 +164,16 @@ export default function LoginPage() {
             </label>
           </div>
 
-          {/* Login Button */}
-          <button
-            type="submit"
-            className="w-full py-3 text-lg font-semibold rounded-xl 
-            bg-[#036EC9] hover:bg-[#025ba8] text-white shadow-lg 
-            hover:shadow-[#036EC9]/40 transition-all duration-300"
-          >
-            Log In
-          </button>
-        </form>
+            {/* Login Button */}
+            <button
+              type="submit"
+              className="w-full py-3 text-lg font-semibold rounded-xl
+              bg-main hover:bg-blue-700 text-white shadow-lg
+              hover:shadow-main/40 transition-all duration-300"
+            >
+              Log In
+            </button>
+          </form>
       </div>
     </div>
   );
