@@ -1,69 +1,54 @@
-import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { useMemo } from 'react';
+import { motion, LayoutGroup } from 'framer-motion';
 
-const ranges = [
-  { label: 'Last 1 hour', value: 1, unit: 'hour' },
-  { label: 'Last 24 hours', value: 24, unit: 'hour' },
-  { label: 'Last 7 days', value: 7, unit: 'day' },
+export const ranges = [
+  { label: '1H', value: 1, unit: 'hour' },
+  { label: '24H', value: 24, unit: 'hour' },
+  { label: '7D', value: 7, unit: 'day' },
 ];
 
 function formatDate(date) {
   return date.toLocaleDateString('en-GB');
 }
 
-export default function TimeRangeSelector() {
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(ranges[1]);
-
+export default function TimeRangeSelector({ value = ranges[1], onChange }) {
   const rangeText = useMemo(() => {
     const end = new Date();
     const start = new Date(end);
-    if (selected.unit === 'hour') {
-      start.setHours(end.getHours() - selected.value);
-    } else if (selected.unit === 'day') {
-      start.setDate(end.getDate() - selected.value);
+    if (value.unit === 'hour') {
+      start.setHours(end.getHours() - value.value);
+    } else if (value.unit === 'day') {
+      start.setDate(end.getDate() - value.value);
     }
     return `${formatDate(start)} - ${formatDate(end)}`;
-  }, [selected]);
+  }, [value]);
 
   return (
     <div className="relative">
-      <motion.button
-        whileTap={{ scale: 0.97 }}
-        onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-4 py-2 bg-main text-white rounded-lg shadow"
-      >
-        {selected.label}
-        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
-          <ChevronDown size={16} />
-        </motion.span>
-      </motion.button>
-      <AnimatePresence>
-        {open && (
-          <motion.ul
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.15 }}
-            className="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden z-10"
-          >
-            {ranges.map((r) => (
-              <li key={r.label}>
-                <button
-                  className="w-full px-4 py-2 text-left hover:bg-main/10 dark:hover:bg-main/20"
-                  onClick={() => {
-                    setSelected(r);
-                    setOpen(false);
-                  }}
-                >
-                  {r.label}
-                </button>
-              </li>
-            ))}
-          </motion.ul>
-        )}
-      </AnimatePresence>
+      <LayoutGroup>
+        <div className="flex bg-gray-200 dark:bg-gray-700 rounded-full p-1">
+          {ranges.map((r) => (
+            <button
+              key={r.label}
+              onClick={() => onChange && onChange(r)}
+              className={`relative flex-1 px-3 py-1 text-sm font-medium transition-colors ${
+                value.label === r.label
+                  ? 'text-white'
+                  : 'text-gray-700 dark:text-gray-300'
+              }`}
+            >
+              {value.label === r.label && (
+                <motion.span
+                  layoutId="pill"
+                  className="absolute inset-0 bg-main rounded-full"
+                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">{r.label}</span>
+            </button>
+          ))}
+        </div>
+      </LayoutGroup>
       <motion.div
         key={rangeText}
         initial={{ opacity: 0, y: 6 }}
@@ -76,4 +61,3 @@ export default function TimeRangeSelector() {
     </div>
   );
 }
-
