@@ -4,10 +4,10 @@ header('Content-Type: application/json');
 $start = $_GET['start'] ?? null;
 $end = $_GET['end'] ?? null;
 
-$host = getenv('DB_HOST') ?: 'localhost';
-$user = getenv('DB_USER') ?: 'root';
-$pass = getenv('DB_PASS') ?: '';
-$name = getenv('DB_NAME') ?: 'sedna';
+$host = getenv('DB_HOST') ?: 'dw.digirockinnovations.com';
+$user = getenv('DB_USER') ?: 'alex';
+$pass = getenv('DB_PASS') ?: 'yHf7jK@3Lm!1';
+$name = getenv('DB_NAME') ?: 'kilken';
 
 $conn = new mysqli($host, $user, $pass, $name);
 if ($conn->connect_error) {
