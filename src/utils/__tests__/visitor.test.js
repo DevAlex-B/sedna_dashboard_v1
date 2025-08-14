@@ -1,4 +1,5 @@
-import { generateOtp, verifyOtp, getTimeWindowStart, handleDigit, handlePaste } from '../visitor';
+import { generateOtp, verifyOtp, getTimeWindowStart } from '../otp';
+import { handleDigit, handlePaste } from '../visitor';
 
 describe('OTP generator', () => {
   const email = 'test@example.com';
