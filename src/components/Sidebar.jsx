@@ -55,18 +55,6 @@ export default function Sidebar() {
 
       {/* Bottom area (no border here) */}
       <div className="p-4 flex flex-col items-center space-y-4">
-        {/* Forms button */}
-        <motion.a
-          href="https://sa.digirockinnovations.com/equipment_form"
-          target="_blank"
-          rel="noopener noreferrer"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className={`${collapsed ? 'w-10 h-10' : 'w-32 px-4 py-2'} mx-auto flex items-center justify-center rounded-full text-white transition-colors bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-focus`}
-        >
-          {collapsed ? <FileText className="w-5 h-5" /> : 'Forms'}
-        </motion.a>
-
         {/* QR + label (expanded only) */}
         {!collapsed && (
           <div className="flex flex-col items-center">
