@@ -45,7 +45,12 @@ export default function FeedToPlantChart({ range }) {
     const ctx = canvas?.getContext('2d');
     if (!ctx) return;
 
-    const labels = data.map((d) => d.time);
+    const labels = data.map((d) => {
+      const date = new Date(d.time);
+      return range.unit === 'day'
+        ? date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+        : date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    });
     const values = data.map((d) => d.value);
 
     chartRef.current?.destroy();
@@ -67,12 +72,12 @@ export default function FeedToPlantChart({ range }) {
         responsive: true,
         maintainAspectRatio: false,
         animation: { duration: 500, easing: 'easeOutQuart' },
-        plugins: { legend: { display: false } },
+        plugins: { legend: { display: false }, datalabels: { display: false } },
         scales: {
           x: {
             ticks: {
               color: theme === 'dark' ? '#e5e7eb' : '#374151',
-              maxTicksLimit: Math.ceil(labels.length / 2),
+              maxTicksLimit: range.unit === 'day' ? 7 : 6,
             },
             grid: { display: false },
           },

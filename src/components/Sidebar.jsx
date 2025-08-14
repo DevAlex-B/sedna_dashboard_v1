@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, MapPin, Activity, DollarSign, FileText } from 'lucide-react';
 import NavButton from './NavButton';
+import qr from '../assets/dashboard_qr.png';
+import driLogo from '../assets/DRi_logo_v3_white (2).png';
 
 const navItems = [
   { to: '/equipment-location', icon: MapPin, label: 'Equipment Location' },
@@ -29,6 +31,24 @@ export default function Sidebar() {
           <NavButton key={item.to} {...item} collapsed={collapsed} />
         ))}
       </nav>
+      <div className="p-4 flex flex-col items-center space-y-4">
+        <a
+          href="https://sa.digirockinnovations.com/equipment_form"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full flex items-center justify-center rounded text-white"
+          style={{ backgroundColor: '#036EC8' }}
+        >
+          {collapsed ? <FileText className="w-5 h-5" /> : 'Forms'}
+        </a>
+        {!collapsed && <img src={qr} alt="Dashboard QR" className="w-24 h-24" />}
+        {!collapsed && (
+          <div className="flex items-center space-x-2">
+            <em className="text-xs">Powered by</em>
+            <img src={driLogo} alt="DRi logo" className="h-4" />
+          </div>
+        )}
+      </div>
     </motion.aside>
   );
 }

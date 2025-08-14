@@ -6,7 +6,7 @@ export default function Header() {
   const { logout } = useAuth();
   return (
     <header className="w-full flex items-center justify-between px-4 py-2 bg-white dark:bg-[#20252a] text-gray-900 dark:text-white shadow">
-      <div className="flex items-center">
+      <div className="flex items-center ml-4">
         <img src={logo} alt="Sedna logo" className="h-8 w-auto" />
       </div>
       <div className="flex items-center space-x-3">

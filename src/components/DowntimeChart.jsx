@@ -56,6 +56,10 @@ export default function DowntimeChart({ data }) {
             position: 'top',
             labels: {
               color: theme === 'dark' ? '#e5e7eb' : '#374151',
+              usePointStyle: true,
+              pointStyle: 'circle',
+              boxWidth: 10,
+              boxHeight: 10,
             },
           },
           datalabels: {
