@@ -16,7 +16,7 @@ export default function MobileNav({ open, onClose }) {
       </button>
       <nav className="flex-1">
         {navItems.map((item) => (
-          <NavButton key={item.to} {...item} collapsed={false} />
+          <NavButton key={item.to} {...item} collapsed={false} onClick={onClose} />
         ))}
       </nav>
       <motion.a

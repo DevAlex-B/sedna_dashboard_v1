@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 export default function DashboardLayout() {
   return (
-    <div className="grid min-h-screen md:grid-cols-[260px_1fr] bg-app text-default">
+    <div className="min-h-screen bg-app text-default md:grid md:grid-cols-[260px_1fr]">
       <Sidebar />
       <div className="flex flex-col overflow-hidden">
         <Header />

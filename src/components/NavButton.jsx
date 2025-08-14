@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom';
 
-export default function NavButton({ to, icon: Icon, label, collapsed }) {
+export default function NavButton({ to, icon: Icon, label, collapsed, onClick }) {
   return (
     <NavLink
       to={to}
+      onClick={onClick}
       className={({ isActive }) =>
         `group flex items-center px-4 py-2 my-1 rounded transition-colors text-default hover:text-secondary hover:bg-border ${
           isActive ? 'bg-border' : ''
