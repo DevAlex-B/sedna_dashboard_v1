@@ -1,16 +1,29 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import Chart from '../chart';
 
-export default function DowntimeChart({ data }) {
+export default function DowntimeChart() {
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
   const { theme } = useTheme();
+  const [latest, setLatest] = useState(null);
 
   useEffect(() => {
-    if (!data.length) return;
+    const fetchLatest = async () => {
+      try {
+        const res = await fetch('/api/equipment_status.php?latest=1');
+        const json = await res.json();
+        setLatest(json[0] || null);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchLatest();
+  }, []);
 
-    const latest = data[0];
+  useEffect(() => {
+    if (!latest) return;
+
     const parseHours = (start, end) => {
       if (!start || !end) return 0;
       const s = new Date(`1970-01-01T${start}Z`);
@@ -36,7 +49,7 @@ export default function DowntimeChart({ data }) {
 
     chartRef.current?.destroy();
     chartRef.current = new Chart(ctx, {
-      type: 'pie',
+      type: 'doughnut',
       data: {
         labels: ['Operational Time', 'Planned Downtime', 'Unplanned Downtime'],
         datasets: [
@@ -51,6 +64,7 @@ export default function DowntimeChart({ data }) {
         responsive: true,
         maintainAspectRatio: false,
         animation: { duration: 500, easing: 'easeOutQuart' },
+        cutout: '60%',
         plugins: {
           legend: {
             position: 'top',
@@ -79,7 +93,7 @@ export default function DowntimeChart({ data }) {
       chartRef.current?.destroy();
       chartRef.current = null;
     };
-  }, [data, theme]);
+  }, [latest, theme]);
 
   return (
     <div className="relative w-full h-72">
