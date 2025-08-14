@@ -2,9 +2,12 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, MapPin, Activity, DollarSign, FileText } from 'lucide-react';
 import NavButton from './NavButton';
+import { useTheme } from '../context/ThemeContext';
 import qr from '../assets/dashboard_qr.png';
-import driLogo from '../assets/DRi_logo_v3_white (2).png';
-import logo from '../assets/sedna_logo.png';
+import driLogoLight from '../assets/DRi_logo_v3_white (2).png';
+import driLogoDark from '../assets/DRi_Logo_dark.png';
+import logoLight from '../assets/sedna_logo.png';
+import logoDark from '../assets/sedna_logo_dark.png';
 
 export const navItems = [
   { to: '/equipment-location', icon: MapPin, label: 'Equipment Location' },
@@ -15,6 +18,10 @@ export const navItems = [
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+  const topLogo = isLight ? logoDark : logoLight;
+  const bottomLogo = isLight ? driLogoDark : driLogoLight;
 
   return (
     <motion.aside
@@ -23,8 +30,10 @@ export default function Sidebar() {
       aria-label="Primary sidebar"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-border">
-        <img src={logo} alt="Sedna logo" className="h-8 w-auto" />
+      <div
+        className={`flex items-center p-4 border-b border-border ${collapsed ? 'justify-end' : 'justify-between'}`}
+      >
+        {!collapsed && <img src={topLogo} alt="Sedna logo" className="h-8 w-auto" />}
         <button
           className="focus:outline-none focus:ring-2 focus:ring-focus rounded"
           onClick={() => setCollapsed((prev) => !prev)}
@@ -71,7 +80,7 @@ export default function Sidebar() {
           <div className="w-full border-t border-border pt-4">
             <div className="flex items-center justify-center space-x-2">
               <em className="text-sm text-muted">Powered by</em>
-              <img src={driLogo} alt="DRi logo" className="h-8 w-auto" />
+              <img src={bottomLogo} alt="DRi logo" className="h-8 w-auto" />
             </div>
           </div>
         )}
