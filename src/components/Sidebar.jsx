@@ -20,23 +20,33 @@ export default function Sidebar() {
     <motion.aside
       animate={{ width: collapsed ? 72 : 260 }}
       className="hidden md:flex flex-col h-screen bg-sidebar text-default border-r border-border"
+      aria-label="Primary sidebar"
     >
+      {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border">
         <img src={logo} alt="Sedna logo" className="h-8 w-auto" />
         <button
           className="focus:outline-none focus:ring-2 focus:ring-focus rounded"
           onClick={() => setCollapsed((prev) => !prev)}
-          aria-label="Open navigation"
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          aria-expanded={!collapsed}
+          aria-controls="primary-nav"
+          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           <Menu />
         </button>
       </div>
-      <nav className="flex-1 overflow-y-auto px-2">
+
+      {/* Nav */}
+      <nav id="primary-nav" className="flex-1 overflow-y-auto px-2">
         {navItems.map((item) => (
           <NavButton key={item.to} {...item} collapsed={collapsed} />
         ))}
       </nav>
-      <div className="p-4 flex flex-col items-center space-y-4 border-t border-border">
+
+      {/* Bottom area (no border here) */}
+      <div className="p-4 flex flex-col items-center space-y-4">
+        {/* Forms button */}
         <motion.a
           href="https://sa.digirockinnovations.com/equipment_form"
           target="_blank"
@@ -47,11 +57,22 @@ export default function Sidebar() {
         >
           {collapsed ? <FileText className="w-5 h-5" /> : 'Forms'}
         </motion.a>
-        {!collapsed && <img src={qr} alt="Dashboard QR" className="w-24 h-24" />}
+
+        {/* QR + label (expanded only) */}
         {!collapsed && (
-          <div className="flex items-center space-x-2">
-            <em className="text-xs text-muted">Powered by</em>
-            <img src={driLogo} alt="DRi logo" className="h-4" />
+          <div className="flex flex-col items-center">
+            <img src={qr} alt="Dashboard QR code" className="w-24 h-24" />
+            <span className="mt-2 text-xs text-muted">Dashboard QR</span>
+          </div>
+        )}
+
+        {/* Powered by (expanded only) — gets the thin top border */}
+        {!collapsed && (
+          <div className="w-full border-t border-border pt-4">
+            <div className="flex items-center justify-center space-x-2">
+              <em className="text-sm text-muted">Powered by</em>
+              <img src={driLogo} alt="DRi logo" className="h-8 w-auto" />
+            </div>
           </div>
         )}
       </div>
