@@ -2,6 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply min-h-screen bg-white dark:bg-[#1a1d20] bg-gradient-light dark:bg-gradient-dark text-gray-900 dark:text-gray-100;
+:root {
+  --header-bg: #F4F6F8;
+  --app-bg: #F8FAFB;
+  --sidebar-bg: #FFFFFF;
+  --text: #1F2A37;
+  --text-muted: #6B7280;
+  --border: #E5E7EB;
+  --primary: #036EC8;
+  --secondary: #E08027;
+  --primary-hover: #025ca3;
+  --focus: #3a91d5;
+}
+
+[data-theme='dark'] {
+  --header-bg: #2E353B;
+  --app-bg: #20252A;
+  --sidebar-bg: #1D2227;
+  --text: #E7ECEF;
+  --text-muted: #9AA6B2;
+  --border: #2B3238;
+  --primary: #036EC8;
+  --secondary: #E08027;
+  --primary-hover: #025ca3;
+  --focus: #59a5e5;
+}
+
+[data-theme='light'] {
+  --header-bg: #F4F6F8;
+  --app-bg: #F8FAFB;
+  --sidebar-bg: #FFFFFF;
+  --text: #1F2A37;
+  --text-muted: #6B7280;
+  --border: #E5E7EB;
+  --primary: #036EC8;
+  --secondary: #E08027;
+  --primary-hover: #025ca3;
+  --focus: #3a91d5;
+}
+
+#root {
+  @apply min-h-screen bg-app text-default;
 }

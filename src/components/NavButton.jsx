@@ -5,8 +5,8 @@ export default function NavButton({ to, icon: Icon, label, collapsed }) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `group flex items-center px-4 py-2 my-1 rounded transition-colors text-gray-800 dark:text-gray-200 hover:text-secondary hover:bg-gray-200 dark:hover:bg-gray-700 ${
-          isActive ? 'bg-gray-200 dark:bg-gray-700' : ''
+        `group flex items-center px-4 py-2 my-1 rounded transition-colors text-default hover:text-secondary hover:bg-border ${
+          isActive ? 'bg-border' : ''
         }`
       }
     >

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import ThemeToggle from './ThemeToggle';
-import logo from '../assets/sedna_logo.png';
 import { useAuth } from '../context/AuthContext';
 import { Menu } from 'lucide-react';
 import MobileNav from './MobileNav';
@@ -9,21 +8,19 @@ export default function Header() {
   const { logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   return (
-    <header className="w-full flex items-center justify-between px-4 py-2 bg-white dark:bg-[#20252a] text-gray-900 dark:text-white shadow">
-      <div className="flex items-center ml-4">
-        <button
-          onClick={() => setMobileOpen(true)}
-          className="mr-2 md:hidden focus:outline-none"
-        >
-          <Menu />
-        </button>
-        <img src={logo} alt="Sedna logo" className="h-8 w-auto" />
-      </div>
-      <div className="flex items-center space-x-3">
-        <button className="px-4 py-2 rounded-full bg-main text-white hover:bg-blue-700">Support</button>
+    <header className="flex items-center justify-between h-14 px-4 rounded-xl bg-header text-default shadow border border-border mx-2 my-2">
+      <button
+        onClick={() => setMobileOpen(true)}
+        className="md:hidden focus:outline-none focus:ring-2 focus:ring-focus rounded"
+        aria-label="Open navigation"
+      >
+        <Menu />
+      </button>
+      <div className="flex items-center space-x-3 ml-auto">
+        <button className="px-4 py-2 rounded-full bg-primary text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-focus">Support</button>
         <button
           onClick={logout}
-          className="px-4 py-2 rounded-full bg-red-500 text-white hover:bg-red-600"
+          className="px-4 py-2 rounded-full bg-secondary text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-focus"
         >
           Logout
         </button>
