@@ -4,7 +4,7 @@ export default function VisitorCollectForm({ name, email, consent, setName, setE
       <div>
         <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Full name</label>
         <input
-          className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20 bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white focus:ring-2 focus:ring-main focus:border-main outline-none placeholder-gray-500 dark:placeholder-gray-400"
+          className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20 bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none placeholder-gray-500 dark:placeholder-gray-400"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -14,7 +14,7 @@ export default function VisitorCollectForm({ name, email, consent, setName, setE
         <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Email</label>
         <input
           type="email"
-          className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20 bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white focus:ring-2 focus:ring-main focus:border-main outline-none placeholder-gray-500 dark:placeholder-gray-400"
+          className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20 bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-primary outline-none placeholder-gray-500 dark:placeholder-gray-400"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -36,7 +36,7 @@ export default function VisitorCollectForm({ name, email, consent, setName, setE
       <button
         type="submit"
         disabled={!consent}
-        className="w-full py-3 text-lg font-semibold rounded-xl bg-main hover:bg-blue-700 text-white shadow-lg hover:shadow-main/40 transition-all duration-300 disabled:opacity-50"
+        className="w-full py-3 text-lg font-semibold rounded-xl bg-primary hover:bg-primary-hover text-white shadow-lg hover:shadow-primary/40 transition-all duration-300 disabled:opacity-50"
       >
         Continue
       </button>
