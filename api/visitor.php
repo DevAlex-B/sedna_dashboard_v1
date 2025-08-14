@@ -10,9 +10,8 @@ function getTimeWindowStart($time = null) {
 function generateOtp($email, $timeWindowStart = null) {
   $secret = getenv('OTP_HMAC_SECRET');
   if (!$secret) {
-    http_response_code(500);
-    echo json_encode(['error' => 'OTP secret not configured']);
-    exit;
+    $secret = 'dev_secret_change_me';
+    error_log('OTP_HMAC_SECRET not set; using development secret');
   }
   $timeWindowStart = $timeWindowStart ?? getTimeWindowStart();
   $data = $email . ':' . $timeWindowStart;
@@ -34,12 +33,27 @@ function smtpSend($to, $name, $subject, $html, $text) {
   $port = getenv('SMTP_PORT');
   $username = getenv('SMTP_USERNAME');
   $password = getenv('SMTP_PASSWORD');
-  $secure = getenv('SMTP_SECURE') === 'true' ? 'ssl://' : '';
-  $from = getenv('MAIL_FROM');
-  $fromName = getenv('MAIL_FROM_NAME');
-  $fp = fsockopen($secure.$host, $port, $errno, $errstr, 30);
+  $secure = getenv('SMTP_SECURE');
+  $from = getenv('MAIL_FROM') ?: 'no-reply@localhost';
+  $fromName = getenv('MAIL_FROM_NAME') ?: 'Sedna';
+
+  if (!$host || !$port || !$username || !$password) {
+    $headers = 'From: ' . $fromName . ' <' . $from . '>\r\n';
+    $headers .= "MIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\n";
+    return mail($to, $subject, $html, $headers);
+  }
+
+  $securePrefix = ($secure === 'ssl' || $secure === 'true') ? 'ssl://' : '';
+  $fp = @fsockopen($securePrefix . $host, $port, $errno, $errstr, 30);
   if (!$fp) return false;
-  $read = function() use ($fp) { $data=''; while($str = fgets($fp,515)) { $data.=$str; if (substr($str,3,1)==' ') break; } return $data; };
+  $read = function() use ($fp) {
+    $data='';
+    while($str = fgets($fp,515)) {
+      $data.=$str;
+      if (substr($str,3,1)==' ') break;
+    }
+    return $data;
+  };
   $cmd = function($cmd) use ($fp, $read) { fwrite($fp, $cmd."\r\n"); return $read(); };
   $read();
   $cmd('EHLO localhost');
