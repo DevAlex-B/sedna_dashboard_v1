@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import VisitorCollectForm from '../components/VisitorCollectForm';
+import OtpInput from '../components/OtpInput';
+import { logEvent } from '../utils/visitor';
 
 function FloatingPaths({ position }) {
   const paths = Array.from({ length: 36 }, (_, i) => ({
@@ -57,12 +60,26 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState(null);
   const [msgType, setMsgType] = useState('');
+  const [mode, setMode] = useState('visitor');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [consent, setConsent] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [step, setStep] = useState(1);
+  const [resendCooldown, setResendCooldown] = useState(0);
   const navigate = useNavigate();
-  const { login, user } = useAuth();
+  const { login, loginVisitor, user } = useAuth();
 
   useEffect(() => {
     if (user) navigate('/equipment-location');
   }, [user, navigate]);
+
+  useEffect(() => {
+    if (resendCooldown > 0) {
+      const t = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
+      return () => clearTimeout(t);
+    }
+  }, [resendCooldown]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -74,6 +91,48 @@ export default function LoginPage() {
     } else {
       setMsg(res.message);
       setMsgType('error');
+    }
+  };
+
+  const sendOtp = async () => {
+    if (!consent) return;
+    const res = await fetch('/api/visitor.php?action=send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email })
+    });
+    if (res.ok) {
+      setStep(2);
+      setOtp('');
+      setResendCooldown(30);
+      logEvent('otp_requested', { emailHash: btoa(email) });
+    } else {
+      setMsg('Failed to send OTP');
+      setMsgType('error');
+    }
+  };
+
+  const handleResend = async () => {
+    if (resendCooldown > 0) return;
+    await sendOtp();
+    logEvent('otp_resent', { emailHash: btoa(email) });
+  };
+
+  const handleVerify = async (e) => {
+    e.preventDefault();
+    const res = await fetch('/api/visitor.php?action=verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, otp })
+    });
+    if (res.ok) {
+      loginVisitor(name, email);
+      logEvent('otp_verified', { emailHash: btoa(email) });
+      navigate('/equipment-location');
+    } else {
+      setMsg('Invalid code');
+      setMsgType('error');
+      logEvent('otp_failed', { emailHash: btoa(email) });
     }
   };
 
@@ -111,69 +170,103 @@ export default function LoginPage() {
           Sign in to continue
         </p>
 
+        <div role="tablist" className="flex mb-6 bg-white/30 dark:bg-black/30 rounded-full p-1">
+          <button
+            role="tab"
+            aria-selected={mode === 'visitor'}
+            className={`flex-1 py-2 rounded-full ${mode === 'visitor' ? 'bg-main text-white' : ''}`}
+            onClick={() => setMode('visitor')}
+          >
+            Visitor
+          </button>
+          <button
+            role="tab"
+            aria-selected={mode === 'admin'}
+            className={`flex-1 py-2 rounded-full ${mode === 'admin' ? 'bg-main text-white' : ''}`}
+            onClick={() => setMode('admin')}
+          >
+            Admin
+          </button>
+        </div>
+
+        {mode === 'admin' && (
           <form className="space-y-6" onSubmit={handleSubmit}>
-          {/* Username */}
-          <div>
-            <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">
-              Username
-            </label>
+            <div>
+              <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">
+                Username
+              </label>
               <input
                 type="text"
                 placeholder="Enter your username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20
-                bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white
-                focus:ring-2 focus:ring-main focus:border-main outline-none
-                placeholder-gray-500 dark:placeholder-gray-400"
+                className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20 bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white focus:ring-2 focus:ring-main focus:border-main outline-none placeholder-gray-500 dark:placeholder-gray-400"
               />
             </div>
-
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">
-              Password
-            </label>
+            <div>
+              <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">
+                Password
+              </label>
               <input
                 type="password"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20
-                bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white
-                focus:ring-2 focus:ring-main focus:border-main outline-none
-                placeholder-gray-500 dark:placeholder-gray-400"
+                className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20 bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white focus:ring-2 focus:ring-main focus:border-main outline-none placeholder-gray-500 dark:placeholder-gray-400"
               />
             </div>
-
-          {/* Remember Me */}
-          <div className="flex items-center">
-            <input
-              id="remember"
-              type="checkbox"
-              checked={rememberMe}
-              onChange={() => setRememberMe(!rememberMe)}
-              className="w-4 h-4 text-[#036EC9] bg-transparent border-white/40 rounded 
-              focus:ring-[#036EC9] dark:focus:ring-[#036EC9]"
-            />
-            <label
-              htmlFor="remember"
-              className="ml-2 text-sm text-gray-800 dark:text-gray-200"
-            >
-              Remember me
-            </label>
-          </div>
-
-            {/* Login Button */}
+            <div className="flex items-center">
+              <input
+                id="remember"
+                type="checkbox"
+                checked={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
+                className="w-4 h-4 text-[#036EC9] bg-transparent border-white/40 rounded focus:ring-[#036EC9] dark:focus:ring-[#036EC9]"
+              />
+              <label
+                htmlFor="remember"
+                className="ml-2 text-sm text-gray-800 dark:text-gray-200"
+              >
+                Remember me
+              </label>
+            </div>
             <button
               type="submit"
-              className="w-full py-3 text-lg font-semibold rounded-xl
-              bg-main hover:bg-blue-700 text-white shadow-lg
-              hover:shadow-main/40 transition-all duration-300"
+              className="w-full py-3 text-lg font-semibold rounded-xl bg-main hover:bg-blue-700 text-white shadow-lg hover:shadow-main/40 transition-all duration-300"
             >
               Log In
             </button>
           </form>
+        )}
+
+        {mode === 'visitor' && (
+          step === 1 ? (
+            <VisitorCollectForm
+              name={name}
+              email={email}
+              consent={consent}
+              setName={setName}
+              setEmail={setEmail}
+              setConsent={setConsent}
+              onSubmit={(e) => {
+                e.preventDefault();
+                sendOtp();
+              }}
+            />
+          ) : (
+            <form className="space-y-4" onSubmit={handleVerify}>
+              <OtpInput value={otp} onChange={setOtp} />
+              <p className="text-sm text-gray-600">Code expires in 5 minutes.</p>
+              <div className="flex justify-between text-sm">
+                <button type="button" className="underline" onClick={() => setStep(1)}>Change email</button>
+                <button type="button" className="underline" disabled={resendCooldown>0} onClick={handleResend}>
+                  {resendCooldown>0 ? `Resend OTP (${resendCooldown})` : 'Resend OTP'}
+                </button>
+              </div>
+              <button type="submit" className="w-full py-2 bg-main text-white rounded">Verify</button>
+            </form>
+          )
+        )}
       </div>
     </div>
   );
