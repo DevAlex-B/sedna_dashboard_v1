@@ -24,6 +24,13 @@ export const AuthProvider = ({ children }) => {
     return { success: false, message: 'Invalid credentials' };
   };
 
+  const loginVisitor = (fullName, email) => {
+    const userData = { fullName, email, visitor: true };
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
+    return { success: true };
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
@@ -31,7 +38,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, loginVisitor, logout }}>
       {children}
     </AuthContext.Provider>
   );
