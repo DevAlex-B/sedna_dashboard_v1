@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import { useAuth } from '../context/AuthContext';
 import { Menu } from 'lucide-react';
@@ -7,6 +8,11 @@ import MobileNav from './MobileNav';
 export default function Header() {
   const { logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location]);
   return (
     <header className="flex items-center justify-between h-14 px-4 rounded-xl bg-header text-default shadow border border-border mx-2 my-2">
       <button
