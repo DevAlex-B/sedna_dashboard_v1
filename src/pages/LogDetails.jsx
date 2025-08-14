@@ -43,7 +43,7 @@ export default function LogDetails() {
           <h1 className="text-2xl font-semibold">Log Details</h1>
           <TimeRangeSelector value={range} onChange={setRange} />
         </div>
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-2">
           <div className={`${panelClasses} flex flex-col items-center justify-center`}>
             <h2 className="mb-2 font-medium">Visitors</h2>
             <p className="text-4xl font-bold">{counts.visitors}</p>

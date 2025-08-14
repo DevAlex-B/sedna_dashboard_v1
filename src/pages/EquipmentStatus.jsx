@@ -42,8 +42,8 @@ export default function EquipmentStatus() {
           <h1 className="text-2xl font-semibold">Equipment Status</h1>
           <TimeRangeSelector value={range} onChange={setRange} />
         </div>
-        <div className="grid flex-1 grid-cols-3 grid-rows-2 gap-4 min-h-0">
-          <div className={`col-span-2 ${panelClasses} flex flex-col`}>
+        <div className="grid flex-1 grid-cols-1 gap-4 min-h-0 md:grid-cols-3 md:grid-rows-2">
+          <div className={`col-span-1 md:col-span-2 ${panelClasses} flex flex-col`}>
             <h2 className="mb-2 font-medium">Feed to plant</h2>
             <div className="flex-1 h-full min-h-0">
               <FeedToPlantChart range={range} />
@@ -56,10 +56,10 @@ export default function EquipmentStatus() {
           <div className={`col-span-1 ${panelClasses} flex flex-col`}>
             <h2 className="mb-2 font-medium">Downtime</h2>
             <div className="flex-1 h-full min-h-0">
-              <DowntimeChart data={data} />
+              <DowntimeChart />
             </div>
           </div>
-          <div className={`col-span-2 ${panelClasses} flex flex-col`}>
+          <div className={`col-span-1 md:col-span-2 ${panelClasses} flex flex-col`}>
             <h2 className="mb-2 font-medium">Equipment Status</h2>
             <EquipmentStatusTable data={data} />
           </div>

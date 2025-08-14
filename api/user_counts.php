@@ -6,18 +6,19 @@ $start = $_GET['start'] ?? null;
 $end = $_GET['end'] ?? null;
 
 $conn = getEquipmentDbConnection();
-$stmt = $conn->prepare("SELECT dashboard_visitor, COUNT(*) AS count FROM users WHERE created_at BETWEEN ? AND ? GROUP BY dashboard_visitor");
+$stmt = $conn->prepare(
+  "SELECT SUM(CASE WHEN dashboard_visitor = 1 THEN 1 ELSE 0 END) AS dashboard, " .
+  "SUM(CASE WHEN dashboard_visitor = 0 OR dashboard_visitor IS NULL THEN 1 ELSE 0 END) AS visitors " .
+  "FROM users WHERE created_at BETWEEN ? AND ?"
+);
 $stmt->bind_param('ss', $start, $end);
 $stmt->execute();
 $result = $stmt->get_result();
-$counts = ['visitors' => 0, 'dashboard' => 0];
-while ($row = $result->fetch_assoc()) {
-  if ((int)$row['dashboard_visitor'] === 1) {
-    $counts['dashboard'] = (int)$row['count'];
-  } else {
-    $counts['visitors'] = (int)$row['count'];
-  }
-}
+$row = $result->fetch_assoc();
+$counts = [
+  'visitors' => isset($row['visitors']) ? (int)$row['visitors'] : 0,
+  'dashboard' => isset($row['dashboard']) ? (int)$row['dashboard'] : 0,
+];
 $stmt->close();
 $conn->close();
 
