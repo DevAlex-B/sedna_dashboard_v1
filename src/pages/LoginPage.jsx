@@ -174,7 +174,7 @@ export default function LoginPage() {
           <button
             role="tab"
             aria-selected={mode === 'visitor'}
-            className={`flex-1 py-2 rounded-full ${mode === 'visitor' ? 'bg-primary text-white' : ''}`}
+            className={`flex-1 py-2 rounded-full ${mode === 'visitor' ? 'bg-main text-white' : ''}`}
             onClick={() => setMode('visitor')}
           >
             Visitor
@@ -182,7 +182,7 @@ export default function LoginPage() {
           <button
             role="tab"
             aria-selected={mode === 'admin'}
-            className={`flex-1 py-2 rounded-full ${mode === 'admin' ? 'bg-primary text-white' : ''}`}
+            className={`flex-1 py-2 rounded-full ${mode === 'admin' ? 'bg-main text-white' : ''}`}
             onClick={() => setMode('admin')}
           >
             Admin
@@ -200,7 +200,7 @@ export default function LoginPage() {
                 placeholder="Enter your username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20 bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white focus:ring-2 focus:ring-focus focus:border-primary outline-none placeholder-gray-500 dark:placeholder-gray-400"
+                className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20 bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white focus:ring-2 focus:ring-main focus:border-main outline-none placeholder-gray-500 dark:placeholder-gray-400"
               />
             </div>
             <div>
@@ -212,7 +212,7 @@ export default function LoginPage() {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20 bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white focus:ring-2 focus:ring-focus focus:border-primary outline-none placeholder-gray-500 dark:placeholder-gray-400"
+                className="w-full px-4 py-2 rounded-lg border border-white/40 dark:border-white/20 bg-white/30 dark:bg-black/30 text-gray-900 dark:text-white focus:ring-2 focus:ring-main focus:border-main outline-none placeholder-gray-500 dark:placeholder-gray-400"
               />
             </div>
             <div className="flex items-center">
@@ -221,7 +221,7 @@ export default function LoginPage() {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={() => setRememberMe(!rememberMe)}
-                className="w-4 h-4 text-primary bg-transparent border-white/40 rounded focus:ring-focus"
+                className="w-4 h-4 text-[#036EC9] bg-transparent border-white/40 rounded focus:ring-[#036EC9] dark:focus:ring-[#036EC9]"
               />
               <label
                 htmlFor="remember"
@@ -232,7 +232,7 @@ export default function LoginPage() {
             </div>
             <button
               type="submit"
-              className="w-full py-3 text-lg font-semibold rounded-xl bg-primary hover:bg-primary-hover text-white shadow-lg hover:shadow-primary/40 transition-all duration-300"
+              className="w-full py-3 text-lg font-semibold rounded-xl bg-main hover:bg-blue-700 text-white shadow-lg hover:shadow-main/40 transition-all duration-300"
             >
               Log In
             </button>
@@ -263,7 +263,7 @@ export default function LoginPage() {
                   {resendCooldown>0 ? `Resend OTP (${resendCooldown})` : 'Resend OTP'}
                 </button>
               </div>
-              <button type="submit" className="w-full py-2 bg-primary text-white rounded hover:bg-primary-hover">Verify</button>
+              <button type="submit" className="w-full py-2 bg-main text-white rounded">Verify</button>
             </form>
           )
         )}
