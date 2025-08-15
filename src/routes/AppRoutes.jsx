@@ -5,6 +5,7 @@ import EquipmentStatus from '../pages/EquipmentStatus';
 import Finance from '../pages/Finance';
 import LogDetails from '../pages/LogDetails';
 import LoginPage from '../pages/LoginPage';
+import Admin from '../pages/Admin';
 import { useAuth } from '../context/AuthContext';
 
 export default function AppRoutes() {
@@ -21,6 +22,16 @@ export default function AppRoutes() {
         <Route path="equipment-status" element={<EquipmentStatus />} />
         <Route path="finance" element={<Finance />} />
         <Route path="log-details" element={<LogDetails />} />
+        <Route
+          path="admin"
+          element={
+            user && !user.visitor ? (
+              <Admin />
+            ) : (
+              <Navigate to={user ? '/equipment-location' : '/login'} replace />
+            )
+          }
+        />
       </Route>
       <Route
         path="*"

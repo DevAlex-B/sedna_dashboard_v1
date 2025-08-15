@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Menu, MapPin, Activity, DollarSign, FileText } from 'lucide-react';
+import { Menu, MapPin, Activity, DollarSign, FileText, Shield } from 'lucide-react';
 import NavButton from './NavButton';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 import qr from '../assets/dashboard_qr.png';
 import driLogoLight from '../assets/DRi_logo_v3_white (2).png';
 import driLogoDark from '../assets/DRi_Logo_dark.png';
@@ -14,11 +15,13 @@ export const navItems = [
   { to: '/equipment-status', icon: Activity, label: 'Equipment Status' },
   { to: '/finance', icon: DollarSign, label: 'Finance' },
   { to: '/log-details', icon: FileText, label: 'Log Details' },
+  { to: '/admin', icon: Shield, label: 'Admin', adminOnly: true },
 ];
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const { theme } = useTheme();
+  const { user } = useAuth();
   const isLight = theme === 'light';
   const topLogo = isLight ? logoDark : logoLight;
   const bottomLogo = isLight ? driLogoDark : driLogoLight;
@@ -48,9 +51,11 @@ export default function Sidebar() {
 
       {/* Nav */}
       <nav id="primary-nav" className="flex-1 overflow-y-auto px-2">
-        {navItems.map((item) => (
-          <NavButton key={item.to} {...item} collapsed={collapsed} />
-        ))}
+        {navItems
+          .filter((item) => !(item.adminOnly && (!user || user.visitor)))
+          .map((item) => (
+            <NavButton key={item.to} {...item} collapsed={collapsed} />
+          ))}
       </nav>
 
       {/* Bottom area (no border here) */}
