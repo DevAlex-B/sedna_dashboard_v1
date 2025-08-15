@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
@@ -9,26 +9,6 @@ export const AuthProvider = ({ children }) => {
     const stored = localStorage.getItem('user');
     return stored ? JSON.parse(stored) : null;
   });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const res = await fetch('/api/admin_session.php', {
-          credentials: 'include'
-        });
-        if (!res.ok) {
-          throw new Error('Session check failed');
-        }
-      } catch (e) {
-        setUser(null);
-        localStorage.removeItem('user');
-      } finally {
-        setLoading(false);
-      }
-    };
-    checkSession();
-  }, []);
 
   const login = async (username, password, remember) => {
     if (username === 'sedna' && password === 'sedna123') {
@@ -88,10 +68,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider
-      value={{ user, login, loginVisitor, logout, loading }}
-    >
-      {!loading && children}
+    <AuthContext.Provider value={{ user, login, loginVisitor, logout }}>
+      {children}
     </AuthContext.Provider>
   );
 };
