@@ -14,8 +14,9 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route
-        path="/"
-        element={user ? <DashboardLayout /> : <Navigate to="/login" replace />}
+        element={
+          user ? <DashboardLayout /> : <Navigate to="/login" replace />
+        }
       >
         <Route index element={<Navigate to="/equipment-location" />} />
         <Route path="equipment-location" element={<EquipmentLocation />} />
