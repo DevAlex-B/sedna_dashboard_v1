@@ -23,7 +23,7 @@ export default function AppRoutes() {
         <Route path="finance" element={<Finance />} />
         <Route path="log-details" element={<LogDetails />} />
         <Route
-          path="admin"
+          path="admin-dashboard"
           element={
             user && !user.visitor ? (
               <Admin />
