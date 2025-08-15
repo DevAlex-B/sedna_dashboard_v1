@@ -68,11 +68,18 @@ export default function LoginPage() {
   const [step, setStep] = useState(1);
   const [resendCooldown, setResendCooldown] = useState(0);
   const navigate = useNavigate();
-  const { login, loginVisitor, user } = useAuth();
+  const { login, loginVisitor, user, logout, authChecked } = useAuth();
 
   useEffect(() => {
-    if (user) navigate('/equipment-location');
-  }, [user, navigate]);
+    if (!authChecked) return;
+    if (user?.authenticated) {
+      navigate('/equipment-location');
+    } else if (user) {
+      setMsg('Session expired. Please log in again.');
+      setMsgType('error');
+      logout();
+    }
+  }, [user, navigate, logout, authChecked]);
 
   useEffect(() => {
     if (resendCooldown > 0) {
