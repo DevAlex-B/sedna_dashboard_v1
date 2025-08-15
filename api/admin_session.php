@@ -13,6 +13,13 @@ if ($action === 'login') {
         http_response_code(401);
         echo json_encode(['error' => 'Invalid credentials']);
     }
+} elseif ($action === 'validate') {
+    if (!empty($_SESSION['admin'])) {
+        echo json_encode(['authenticated' => true]);
+    } else {
+        http_response_code(401);
+        echo json_encode(['authenticated' => false]);
+    }
 } elseif ($action === 'logout') {
     session_unset();
     session_destroy();
