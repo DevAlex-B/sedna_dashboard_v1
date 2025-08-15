@@ -5,6 +5,8 @@ import financeData from '../finance_data.json';
 import FaultShutdownsChart from '../components/FaultShutdownsChart';
 import IdleCostTotalsChart from '../components/IdleCostTotalsChart';
 import EquipmentUtilizationChart from '../components/EquipmentUtilizationChart';
+import DowntimeGaugeChart from '../components/DowntimeGaugeChart';
+import DowntimeVsOperationalChart from '../components/DowntimeVsOperationalChart';
 
 const panelClasses =
   'p-4 h-full backdrop-blur-md bg-white/5 border border-white/10 rounded-xl shadow-md text-gray-900 dark:text-white';
@@ -82,6 +84,9 @@ export default function Finance() {
           </div>
           <div className={`col-start-5 row-start-1 ${panelClasses} flex flex-col`}>
             <h2 className="font-medium">Downtime</h2>
+            <div className="flex-1 h-full min-h-0 mt-2">
+              <DowntimeGaugeChart />
+            </div>
           </div>
           <div
             className={`col-start-1 row-start-2 col-span-2 row-span-2 ${panelClasses} flex flex-col`}
@@ -103,6 +108,9 @@ export default function Finance() {
             className={`col-start-3 row-start-2 col-span-3 row-span-1 ${panelClasses} flex flex-col`}
           >
             <h2 className="font-medium">Downtime vs. Operational Time</h2>
+            <div className="flex-1 h-full min-h-0 mt-2">
+              <DowntimeVsOperationalChart />
+            </div>
           </div>
           <div
             className={`col-start-3 row-start-3 col-span-3 row-span-3 ${panelClasses} flex flex-col`}
