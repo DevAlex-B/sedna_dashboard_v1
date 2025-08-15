@@ -81,9 +81,9 @@ export default function LoginPage() {
     }
   }, [resendCooldown]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = login(username, password, rememberMe);
+    const res = await login(username, password, rememberMe);
     if (res.success) {
       setMsg('Logged in successfully');
       setMsgType('success');
@@ -126,7 +126,7 @@ export default function LoginPage() {
       body: JSON.stringify({ name, email, otp })
     });
     if (res.ok) {
-      loginVisitor(name, email);
+      await loginVisitor(name, email);
       logEvent('otp_verified', { emailHash: btoa(email) });
       navigate('/equipment-location');
     } else {

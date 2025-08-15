@@ -2,8 +2,10 @@ import { motion } from 'framer-motion';
 import { X, FileText } from 'lucide-react';
 import NavButton from './NavButton';
 import { navItems } from './Sidebar';
+import { useAuth } from '../context/AuthContext';
 
 export default function MobileNav({ open, onClose }) {
+  const { user } = useAuth();
   return (
     <motion.div
       initial={{ x: '-100%' }}
@@ -15,9 +17,11 @@ export default function MobileNav({ open, onClose }) {
         <X />
       </button>
       <nav className="flex-1">
-        {navItems.map((item) => (
-          <NavButton key={item.to} {...item} collapsed={false} onClick={onClose} />
-        ))}
+        {navItems
+          .filter((item) => !(item.adminOnly && (!user || user.visitor)))
+          .map((item) => (
+            <NavButton key={item.to} {...item} collapsed={false} onClick={onClose} />
+          ))}
       </nav>
       <motion.a
         href="https://sa.digirockinnovations.com/equipment_form"
