@@ -5,6 +5,7 @@ import FeedToPlantChart from '../components/FeedToPlantChart';
 import InspectionHistoryTable from '../components/InspectionHistoryTable';
 import EquipmentStatusTable from '../components/EquipmentStatusTable';
 import DowntimeChart from '../components/DowntimeChart';
+import equipmentFormQr from '../assets/equipment_form_qr (1).png';
 
 const panelClasses =
   'p-4 h-full backdrop-blur-md bg-white/5 border border-white/10 rounded-xl shadow-md text-gray-900 dark:text-white';
@@ -42,8 +43,8 @@ export default function EquipmentStatus() {
           <h1 className="text-2xl font-semibold">Equipment Status</h1>
           <TimeRangeSelector value={range} onChange={setRange} />
         </div>
-        <div className="grid flex-1 grid-cols-1 gap-4 min-h-0 md:grid-cols-3 md:grid-rows-2">
-          <div className={`col-span-1 md:col-span-2 ${panelClasses} flex flex-col`}>
+        <div className="grid flex-1 grid-cols-1 gap-4 min-h-0 md:grid-cols-4 md:grid-rows-2">
+          <div className={`col-span-1 md:col-span-3 ${panelClasses} flex flex-col`}>
             <h2 className="mb-2 font-medium">Feed to plant</h2>
             <div className="flex-1 h-full min-h-0">
               <FeedToPlantChart range={range} />
@@ -62,6 +63,14 @@ export default function EquipmentStatus() {
           <div className={`col-span-1 md:col-span-2 ${panelClasses} flex flex-col`}>
             <h2 className="mb-2 font-medium">Equipment Status</h2>
             <EquipmentStatusTable data={data} />
+          </div>
+          <div className={`col-span-1 ${panelClasses} flex flex-col items-center justify-center`}>
+            <h2 className="mb-2 font-medium">Equipment Form</h2>
+            <img
+              src={equipmentFormQr}
+              alt="Equipment form QR code"
+              className="w-full max-w-[120px] h-auto"
+            />
           </div>
         </div>
       </div>

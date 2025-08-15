@@ -49,8 +49,8 @@ export default function Finance() {
           <h1 className="text-2xl font-semibold">Finance</h1>
           <TimeRangeSelector value={range} onChange={setRange} />
         </div>
-        <div className="grid flex-1 min-h-0 grid-cols-5 grid-rows-5 gap-4">
-          <div className={`col-start-1 row-start-1 ${panelClasses} flex flex-col`}>
+        <div className="grid flex-1 min-h-0 gap-4 grid-cols-1 lg:grid-cols-5 lg:grid-rows-5">
+          <div className={`lg:col-start-1 lg:row-start-1 ${panelClasses} flex flex-col`}>
             <h2 className="font-medium">Idle Cost</h2>
             <div className="flex-1 flex items-center justify-center">
               <span className="text-3xl font-bold">
@@ -58,7 +58,7 @@ export default function Finance() {
               </span>
             </div>
           </div>
-          <div className={`col-start-2 row-start-1 ${panelClasses} flex flex-col`}>
+          <div className={`lg:col-start-2 lg:row-start-1 ${panelClasses} flex flex-col`}>
             <h2 className="font-medium">Shutdown</h2>
             <div className="flex-1 flex items-center justify-center">
               <span className="text-3xl font-bold">
@@ -66,7 +66,7 @@ export default function Finance() {
               </span>
             </div>
           </div>
-          <div className={`col-start-3 row-start-1 ${panelClasses} flex flex-col`}>
+          <div className={`lg:col-start-3 lg:row-start-1 ${panelClasses} flex flex-col`}>
             <h2 className="font-medium">Production Lost</h2>
             <div className="flex-1 flex items-center justify-center">
               <span className="text-3xl font-bold">
@@ -74,7 +74,7 @@ export default function Finance() {
               </span>
             </div>
           </div>
-          <div className={`col-start-4 row-start-1 ${panelClasses} flex flex-col`}>
+          <div className={`lg:col-start-4 lg:row-start-1 ${panelClasses} flex flex-col`}>
             <h2 className="font-medium">Total Cost</h2>
             <div className="flex-1 flex items-center justify-center">
               <span className="text-3xl font-bold">
@@ -82,14 +82,14 @@ export default function Finance() {
               </span>
             </div>
           </div>
-          <div className={`col-start-5 row-start-1 ${panelClasses} flex flex-col`}>
+          <div className={`lg:col-start-5 lg:row-start-1 ${panelClasses} flex flex-col`}>
             <h2 className="font-medium">Downtime</h2>
             <div className="flex-1 h-full min-h-0 mt-2">
               <DowntimeGaugeChart />
             </div>
           </div>
           <div
-            className={`col-start-1 row-start-2 col-span-2 row-span-2 ${panelClasses} flex flex-col`}
+            className={`lg:col-start-1 lg:row-start-2 lg:col-span-2 lg:row-span-2 ${panelClasses} flex flex-col`}
           >
             <h2 className="font-medium">Fault Shutdowns</h2>
             <div className="flex-1 h-full min-h-0 mt-2">
@@ -97,7 +97,7 @@ export default function Finance() {
             </div>
           </div>
           <div
-            className={`col-start-1 row-start-4 col-span-2 row-span-2 ${panelClasses} flex flex-col`}
+            className={`lg:col-start-1 lg:row-start-4 lg:col-span-2 lg:row-span-2 ${panelClasses} flex flex-col`}
           >
             <h2 className="font-medium">Idle Cost Totals</h2>
             <div className="flex-1 h-full min-h-0 mt-2">
@@ -105,7 +105,7 @@ export default function Finance() {
             </div>
           </div>
           <div
-            className={`col-start-3 row-start-2 col-span-3 row-span-1 ${panelClasses} flex flex-col`}
+            className={`lg:col-start-3 lg:row-start-2 lg:col-span-3 lg:row-span-1 ${panelClasses} flex flex-col`}
           >
             <h2 className="font-medium">Downtime vs. Operational Time</h2>
             <div className="flex-1 h-full min-h-0 mt-2">
@@ -113,7 +113,7 @@ export default function Finance() {
             </div>
           </div>
           <div
-            className={`col-start-3 row-start-3 col-span-3 row-span-3 ${panelClasses} flex flex-col`}
+            className={`lg:col-start-3 lg:row-start-3 lg:col-span-3 lg:row-span-3 ${panelClasses} flex flex-col`}
           >
             <h2 className="font-medium">Equipment Utilisation Efficiency</h2>
             <div className="flex-1 h-full min-h-0 mt-2">
