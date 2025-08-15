@@ -49,7 +49,7 @@ export default function Finance() {
           <h1 className="text-2xl font-semibold">Finance</h1>
           <TimeRangeSelector value={range} onChange={setRange} />
         </div>
-        <div className="grid flex-1 grid-cols-5 grid-rows-5 gap-4">
+        <div className="grid flex-1 min-h-0 grid-cols-5 grid-rows-5 gap-4">
           <div className={`col-start-1 row-start-1 ${panelClasses} flex flex-col`}>
             <h2 className="font-medium">Idle Cost</h2>
             <div className="flex-1 flex items-center justify-center">
