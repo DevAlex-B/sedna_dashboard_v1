@@ -15,7 +15,7 @@ export const navItems = [
   { to: '/equipment-status', icon: Activity, label: 'Equipment Status' },
   { to: '/finance', icon: DollarSign, label: 'Finance' },
   { to: '/log-details', icon: FileText, label: 'Log Details' },
-  { to: '/admin', icon: Shield, label: 'Admin', adminOnly: true },
+  { to: '/admin-dashboard', icon: Shield, label: 'Admin', adminOnly: true },
 ];
 
 export default function Sidebar() {
