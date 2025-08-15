@@ -2,9 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import Chart from '../chart';
 
-const currencyFormatter = new Intl.NumberFormat('en-ZA', {
-  style: 'currency',
-  currency: 'ZAR',
+const numberFormatter = new Intl.NumberFormat('en-ZA', {
   maximumFractionDigits: 0,
 });
 
@@ -45,7 +43,7 @@ export default function IdleCostTotalsChart({ data = [] }) {
             align: 'end',
             offset: 4,
             color: theme === 'dark' ? '#e5e7eb' : '#374151',
-            formatter: (value) => currencyFormatter.format(value),
+            formatter: (value) => numberFormatter.format(value),
           },
         },
         scales: {
@@ -62,7 +60,7 @@ export default function IdleCostTotalsChart({ data = [] }) {
             beginAtZero: true,
             ticks: {
               color: theme === 'dark' ? '#e5e7eb' : '#374151',
-              callback: (value) => currencyFormatter.format(value),
+              callback: (value) => numberFormatter.format(value),
             },
             grid: { color: theme === 'dark' ? '#374151' : '#e5e7eb' },
           },
