@@ -1,18 +1,17 @@
 import { MapContainer, TileLayer, Polygon, FeatureGroup, Popup } from 'react-leaflet';
-import L from 'leaflet';
+import { EditControl } from 'react-leaflet-draw';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
-import 'leaflet-draw';
 import { useEffect, useRef, useState } from 'react';
 import { getGeofences, createGeofence, deleteGeofence } from '../api/geofences';
 
 const CENTER = [-26.11351258111618, 28.139693428835592];
 
 export default function GeofenceMap() {
-  const [map, setMap] = useState(null);
   const [geofences, setGeofences] = useState([]);
   const [draft, setDraft] = useState(null); // {layer, name, color}
   const groupRef = useRef();
+  const editRef = useRef();
 
   useEffect(() => {
     getGeofences().then(setGeofences).catch(() => {});
@@ -29,18 +28,16 @@ export default function GeofenceMap() {
   }, [draft]);
 
   const startDrawing = () => {
-    if (!map) return;
-    const drawer = new L.Draw.Polygon(map, { showArea: false });
-    drawer.enable();
-    map.dragging.disable();
-    const onCreated = (e) => {
-      drawer.disable();
-      map.dragging.enable();
-      map.off(L.Draw.Event.CREATED, onCreated);
-      groupRef.current.addLayer(e.layer);
-      setDraft({ layer: e.layer, name: '', color: '#ff0000' });
-    };
-    map.on(L.Draw.Event.CREATED, onCreated);
+    const edit = editRef.current;
+    if (!edit) return;
+    const handler = edit._toolbars.draw._modes.polygon.handler;
+    handler.enable();
+  };
+
+  const handleCreated = (e) => {
+    const layer = e.layer;
+    groupRef.current.addLayer(layer);
+    setDraft({ layer, name: '', color: '#ff0000' });
   };
 
   const cancelDraft = () => {
@@ -120,9 +117,23 @@ export default function GeofenceMap() {
           </div>
         </div>
       )}
-      <MapContainer center={CENTER} zoom={13} whenCreated={setMap} className="h-full w-full">
+      <MapContainer center={CENTER} zoom={13} className="h-full w-full">
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <FeatureGroup ref={groupRef}>
+          <EditControl
+            ref={editRef}
+            position="topright"
+            onCreated={handleCreated}
+            draw={{
+              polygon: true,
+              polyline: false,
+              rectangle: false,
+              circle: false,
+              circlemarker: false,
+              marker: false,
+            }}
+            edit={{ edit: false, remove: false }}
+          />
           {geofences.map((g) => (
             <Polygon
               key={g.id}
