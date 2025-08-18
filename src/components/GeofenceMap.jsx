@@ -1,8 +1,12 @@
 import { MapContainer, TileLayer, Polygon, Popup } from 'react-leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import { useEffect, useRef, useState } from 'react';
+
+// Ensure Leaflet is available globally for plugins like Geoman
+window.L = L;
 import {
   getGeofences,
   createGeofence,
@@ -37,7 +41,7 @@ export default function GeofenceMap() {
 
   const startDrawing = () => {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || !map.pm) return;
     if (editing) toggleEdit();
     if (removing) toggleRemove();
     map.pm.enableDraw('Polygon');
@@ -45,7 +49,7 @@ export default function GeofenceMap() {
 
   const toggleEdit = () => {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || !map.pm) return;
     if (removing) {
       map.pm.disableGlobalRemovalMode();
       setRemoving(false);
@@ -60,7 +64,7 @@ export default function GeofenceMap() {
 
   const toggleRemove = () => {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || !map.pm) return;
     if (editing) {
       map.pm.disableGlobalEditMode();
       setEditing(false);
@@ -154,7 +158,7 @@ export default function GeofenceMap() {
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || !map.pm) return;
     map.on('pm:create', handleCreate);
     map.on('pm:edit', handleEdit);
     map.on('pm:remove', handleRemove);
@@ -177,7 +181,7 @@ export default function GeofenceMap() {
       map.off('pm:edit', handleEdit);
       map.off('pm:remove', handleRemove);
     };
-  }, []);
+  }, [mapRef.current]);
 
   return (
     <div className="relative w-full h-full">
