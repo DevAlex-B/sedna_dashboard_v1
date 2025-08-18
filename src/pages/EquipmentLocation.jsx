@@ -19,6 +19,7 @@ export default function EquipmentLocation() {
         <div
           className={`md:col-start-2 md:col-end-4 md:row-start-1 md:row-end-6 ${panelClasses}`}
         >
+         2. Equipment Location
           <GeofenceMap />
         </div>
         <div
