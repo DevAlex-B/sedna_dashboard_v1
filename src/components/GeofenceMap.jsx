@@ -1,8 +1,8 @@
 import { MapContainer, TileLayer, Polygon, FeatureGroup, Popup } from 'react-leaflet';
+import { EditControl } from 'react-leaflet-draw';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import 'leaflet-draw';
-import L from 'leaflet';
 import { useEffect, useRef, useState } from 'react';
 import { getGeofences, createGeofence, deleteGeofence } from '../api/geofences';
 
@@ -13,6 +13,7 @@ export default function GeofenceMap() {
   const [draft, setDraft] = useState(null); // {layer, name, color}
   const groupRef = useRef();
   const mapRef = useRef();
+  const editRef = useRef();
 
   useEffect(() => {
     getGeofences().then(setGeofences).catch(() => {});
@@ -29,11 +30,10 @@ export default function GeofenceMap() {
   }, [draft]);
 
   const startDrawing = () => {
-    const map = mapRef.current;
-    if (!map) return;
-    const drawer = new L.Draw.Polygon(map);
-    map.once(L.Draw.Event.CREATED, handleCreated);
-    drawer.enable();
+    const edit = editRef.current;
+    if (!edit) return;
+    // use documented startDraw method from react-leaflet-draw
+    edit._leafletClass.startDraw();
   };
 
   const handleCreated = (e) => {
@@ -129,6 +129,24 @@ export default function GeofenceMap() {
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <FeatureGroup ref={groupRef}>
+          <EditControl
+            ref={editRef}
+            style={{ display: 'none' }}
+            position="topright"
+            onCreated={handleCreated}
+            draw={{
+              polygon: true,
+              polyline: false,
+              rectangle: false,
+              circle: false,
+              marker: false,
+              circlemarker: false,
+            }}
+            edit={{
+              edit: false,
+              remove: false,
+            }}
+          />
           {geofences.map((g) => (
             <Polygon
               key={g.id}
