@@ -7,14 +7,33 @@ export default function EquipmentLocation() {
   return (
     <PageContainer>
       <h1 className="text-2xl font-semibold mb-6">Equipment Location</h1>
-      <div className="flex flex-col gap-4 h-auto md:flex-row md:h-[500px]">
-        <div className={`w-full md:w-1/3 ${panelClasses}`}>Panel 1</div>
-        <div className="flex flex-col gap-4 flex-1">
-          <div className={`flex-1 ${panelClasses}`}>Panel 2</div>
-          <div className="flex flex-col gap-4 flex-1 md:flex-row">
-            <div className={`flex-1 ${panelClasses}`}>Panel 3</div>
-            <div className={`flex-1 ${panelClasses}`}>Panel 4</div>
-          </div>
+      <div
+        className="grid grid-cols-1 gap-4 md:grid-cols-5 md:grid-rows-5 md:h-[500px]"
+      >
+        <div
+          className={`md:col-start-1 md:col-end-2 md:row-start-1 md:row-end-6 ${panelClasses}`}
+        >
+          1. Geofence History
+        </div>
+        <div
+          className={`md:col-start-2 md:col-end-4 md:row-start-1 md:row-end-6 ${panelClasses}`}
+        >
+          2. Equipment Location
+        </div>
+        <div
+          className={`md:col-start-4 md:col-end-5 md:row-start-1 md:row-end-4 ${panelClasses}`}
+        >
+          3. Current Status
+        </div>
+        <div
+          className={`md:col-start-5 md:col-end-6 md:row-start-1 md:row-end-4 ${panelClasses}`}
+        >
+          4. Distance - km
+        </div>
+        <div
+          className={`md:col-start-4 md:col-end-6 md:row-start-4 md:row-end-6 ${panelClasses}`}
+        >
+          5. Distance - km
         </div>
       </div>
     </PageContainer>
