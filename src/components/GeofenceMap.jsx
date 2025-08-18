@@ -1,19 +1,23 @@
-import { MapContainer, TileLayer, Polygon, FeatureGroup, Popup } from 'react-leaflet';
-import { EditControl } from 'react-leaflet-draw';
+import { MapContainer, TileLayer, Polygon, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import 'leaflet-draw/dist/leaflet.draw.css';
-import 'leaflet-draw';
+import '@geoman-io/leaflet-geoman-free';
+import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import { useEffect, useRef, useState } from 'react';
-import { getGeofences, createGeofence, deleteGeofence } from '../api/geofences';
+import {
+  getGeofences,
+  createGeofence,
+  updateGeofence,
+  deleteGeofence,
+} from '../api/geofences';
 
 const CENTER = [-26.11351258111618, 28.139693428835592];
 
 export default function GeofenceMap() {
   const [geofences, setGeofences] = useState([]);
   const [draft, setDraft] = useState(null); // {layer, name, color}
-  const groupRef = useRef();
+  const [editing, setEditing] = useState(false);
+  const [removing, setRemoving] = useState(false);
   const mapRef = useRef();
-  const editRef = useRef();
 
   useEffect(() => {
     getGeofences().then(setGeofences).catch(() => {});
@@ -23,28 +27,61 @@ export default function GeofenceMap() {
     const handler = (e) => {
       if (e.key === 'Escape') {
         if (draft) cancelDraft();
+        if (editing) toggleEdit();
+        if (removing) toggleRemove();
       }
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [draft]);
+  }, [draft, editing, removing]);
 
   const startDrawing = () => {
-    const edit = editRef.current;
-    if (!edit) return;
-    // use documented startDraw method from react-leaflet-draw
-    edit._leafletClass.startDraw();
+    const map = mapRef.current;
+    if (!map) return;
+    if (editing) toggleEdit();
+    if (removing) toggleRemove();
+    map.pm.enableDraw('Polygon');
   };
 
-  const handleCreated = (e) => {
+  const toggleEdit = () => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (removing) {
+      map.pm.disableGlobalRemovalMode();
+      setRemoving(false);
+    }
+    if (editing) {
+      map.pm.disableGlobalEditMode();
+    } else {
+      map.pm.enableGlobalEditMode();
+    }
+    setEditing(!editing);
+  };
+
+  const toggleRemove = () => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (editing) {
+      map.pm.disableGlobalEditMode();
+      setEditing(false);
+    }
+    if (removing) {
+      map.pm.disableGlobalRemovalMode();
+    } else {
+      map.pm.enableGlobalRemovalMode();
+    }
+    setRemoving(!removing);
+  };
+
+  const handleCreate = (e) => {
     const layer = e.layer;
-    groupRef.current.addLayer(layer);
+    layer.setStyle({ color: '#ff0000', fillColor: '#ff0000', fillOpacity: 0.2 });
     setDraft({ layer, name: '', color: '#ff0000' });
   };
 
   const cancelDraft = () => {
     if (draft) {
-      groupRef.current.removeLayer(draft.layer);
+      draft.layer.remove();
       setDraft(null);
     }
   };
@@ -67,34 +104,105 @@ export default function GeofenceMap() {
         coordinates: { type: 'Polygon', coordinates: [coords] },
       });
       setGeofences((f) => [...f, newFence]);
+      draft.layer.remove();
       setDraft(null);
     } catch {
       alert('Error saving geofence');
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this geofence?')) return;
+  const handleEdit = async (e) => {
+    const layer = e.layer;
+    const id = layer.geofenceId;
+    if (!id) return;
+    const latlngs = layer.getLatLngs()[0];
+    let coords = latlngs.map((p) => [p.lng, p.lat]);
+    const first = coords[0];
+    const last = coords[coords.length - 1];
+    if (first[0] !== last[0] || first[1] !== last[1]) coords.push(first);
+    try {
+      const updated = await updateGeofence(id, {
+        coordinates: { type: 'Polygon', coordinates: [coords] },
+      });
+      setGeofences((f) =>
+        f.map((g) => (g.id === id ? { ...g, coordinates: updated.coordinates } : g))
+      );
+    } catch {
+      alert('Error updating geofence');
+    }
+  };
+
+  const handleRemove = async (e) => {
+    const layer = e.layer;
+    const id = layer.geofenceId;
+    if (!id) return;
+    if (!window.confirm('Delete this geofence?')) {
+      mapRef.current.addLayer(layer);
+      return;
+    }
     try {
       await deleteGeofence(id);
       setGeofences((f) => f.filter((g) => g.id !== id));
     } catch {
       alert('Error deleting geofence');
+      mapRef.current.addLayer(layer);
     }
   };
 
-  const polygonPositions = (geo) => geo.coordinates[0].map(([lng, lat]) => [lat, lng]);
+  const polygonPositions = (geo) =>
+    geo.coordinates[0].map(([lng, lat]) => [lat, lng]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    map.on('pm:create', handleCreate);
+    map.on('pm:edit', handleEdit);
+    map.on('pm:remove', handleRemove);
+    map.pm.addControls({
+      position: 'topright',
+      drawMarker: false,
+      drawCircle: false,
+      drawPolyline: false,
+      drawRectangle: false,
+      drawCircleMarker: false,
+      drawPolygon: false,
+      editMode: false,
+      dragMode: false,
+      cutPolygon: false,
+      removalMode: false,
+      rotateMode: false,
+    });
+    return () => {
+      map.off('pm:create', handleCreate);
+      map.off('pm:edit', handleEdit);
+      map.off('pm:remove', handleRemove);
+    };
+  }, []);
 
   return (
     <div className="relative w-full h-full">
-      <button
-        className="absolute z-[1000] top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded"
-        onClick={startDrawing}
-      >
-        New Geofence
-      </button>
+      <div className="absolute z-[1000] top-2 right-2 flex flex-col gap-2">
+        <button
+          className="bg-blue-500 text-white px-2 py-1 rounded"
+          onClick={startDrawing}
+        >
+          New Geofence
+        </button>
+        <button
+          className="bg-blue-500 text-white px-2 py-1 rounded"
+          onClick={toggleEdit}
+        >
+          {editing ? 'Finish Edit' : 'Edit'}
+        </button>
+        <button
+          className="bg-blue-500 text-white px-2 py-1 rounded"
+          onClick={toggleRemove}
+        >
+          {removing ? 'Finish Delete' : 'Delete'}
+        </button>
+      </div>
       {draft && (
-        <div className="absolute z-[1000] top-12 left-2 bg-white text-black p-2 rounded shadow w-40">
+        <div className="absolute z-[1000] top-2 left-2 bg-white text-black p-2 rounded shadow w-40">
           <label className="block text-sm">Name</label>
           <input
             className="w-full border mb-1 p-1 text-sm"
@@ -106,7 +214,14 @@ export default function GeofenceMap() {
             type="color"
             className="w-full mb-2"
             value={draft.color}
-            onChange={(e) => setDraft({ ...draft, color: e.target.value })}
+            onChange={(e) => {
+              draft.layer.setStyle({
+                color: e.target.value,
+                fillColor: e.target.value,
+                fillOpacity: 0.2,
+              });
+              setDraft({ ...draft, color: e.target.value });
+            }}
           />
           <div className="flex justify-end gap-2 text-sm">
             <button onClick={cancelDraft}>Cancel</button>
@@ -128,46 +243,26 @@ export default function GeofenceMap() {
         }}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <FeatureGroup ref={groupRef}>
-          <EditControl
-            ref={editRef}
-            style={{ display: 'none' }}
-            position="topright"
-            onCreated={handleCreated}
-            draw={{
-              polygon: true,
-              polyline: false,
-              rectangle: false,
-              circle: false,
-              marker: false,
-              circlemarker: false,
+        {geofences.map((g) => (
+          <Polygon
+            key={g.id}
+            positions={polygonPositions(g.coordinates)}
+            pathOptions={{
+              color: g.color,
+              fillColor: g.color,
+              fillOpacity: 0.2,
             }}
-            edit={{
-              edit: false,
-              remove: false,
+            ref={(layer) => {
+              if (layer) layer.geofenceId = g.id;
             }}
-          />
-          {geofences.map((g) => (
-            <Polygon
-              key={g.id}
-              positions={polygonPositions(g.coordinates)}
-              pathOptions={{ color: g.color, fillColor: g.color, fillOpacity: 0.2 }}
-            >
-              <Popup>
-                <div>
-                  <div className="font-semibold">{g.name}</div>
-                  <button
-                    className="mt-2 text-red-600"
-                    onClick={() => handleDelete(g.id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </Popup>
-            </Polygon>
-          ))}
-        </FeatureGroup>
+          >
+            <Popup>
+              <div className="font-semibold">{g.name}</div>
+            </Popup>
+          </Polygon>
+        ))}
       </MapContainer>
     </div>
   );
 }
+
