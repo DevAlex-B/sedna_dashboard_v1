@@ -1,6 +1,4 @@
 import PageContainer from '../components/PageContainer';
-import GeofenceMap from '../components/GeofenceMap';
-import MapErrorBoundary from '../components/MapErrorBoundary';
 
 export default function EquipmentLocation() {
   const panelClasses =
@@ -15,15 +13,12 @@ export default function EquipmentLocation() {
         <div
           className={`md:col-start-1 md:col-end-2 md:row-start-1 md:row-end-6 ${panelClasses}`}
         >
-          1. Geofence History
+          1. History
         </div>
         <div
           className={`md:col-start-2 md:col-end-4 md:row-start-1 md:row-end-6 ${panelClasses}`}
         >
-         2. Equipment Location
-          <MapErrorBoundary>
-            <GeofenceMap />
-          </MapErrorBoundary>
+          2. Equipment Location
         </div>
         <div
           className={`md:col-start-4 md:col-end-5 md:row-start-1 md:row-end-4 ${panelClasses}`}
