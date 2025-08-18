@@ -2,6 +2,7 @@ import { MapContainer, TileLayer, Polygon, FeatureGroup, Popup } from 'react-lea
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
+import 'leaflet-draw';
 import { useEffect, useRef, useState } from 'react';
 import { getGeofences, createGeofence, deleteGeofence } from '../api/geofences';
 
@@ -88,7 +89,7 @@ export default function GeofenceMap() {
   return (
     <div className="relative w-full h-full">
       <button
-        className="absolute z-[1000] top-2 left-2 bg-blue-500 text-white px-2 py-1 rounded"
+        className="absolute z-[1000] top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded"
         onClick={startDrawing}
       >
         New Geofence
