@@ -4,15 +4,15 @@ import 'leaflet/dist/leaflet.css';
 import '@geoman-io/leaflet-geoman-free';
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
 import { useEffect, useRef, useState } from 'react';
-
-// Ensure Leaflet is available globally for plugins like Geoman
-window.L = L;
 import {
   getGeofences,
   createGeofence,
   updateGeofence,
   deleteGeofence,
 } from '../api/geofences';
+
+// Ensure Leaflet is available globally for plugins like Geoman
+window.L = L;
 
 const CENTER = [-26.11351258111618, 28.139693428835592];
 

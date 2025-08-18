@@ -2,8 +2,7 @@ import { useRef } from 'react';
 import { handleDigit, handlePaste } from '../utils/visitor';
 
 export default function OtpInput({ value, onChange }) {
-  const inputs = Array.from({ length: 4 });
-  const refs = inputs.map(() => useRef());
+  const refs = [useRef(), useRef(), useRef(), useRef()];
 
   const handleChange = (idx, val) => {
     const { value: newVal, next } = handleDigit(value, idx, val);
@@ -33,7 +32,7 @@ export default function OtpInput({ value, onChange }) {
 
   return (
     <div className="flex justify-center space-x-2" onPaste={handlePasteEvent}>
-      {inputs.map((_, i) => (
+      {[0, 1, 2, 3].map((_, i) => (
         <input
           key={i}
           ref={refs[i]}
