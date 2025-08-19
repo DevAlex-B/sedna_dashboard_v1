@@ -1,4 +1,5 @@
 import PageContainer from '../components/PageContainer';
+import GeofenceMap from '../components/GeofenceMap';
 
 export default function EquipmentLocation() {
   const panelClasses =
@@ -15,11 +16,11 @@ export default function EquipmentLocation() {
         >
           1. History
         </div>
-        <div
-          className={`md:col-start-2 md:col-end-4 md:row-start-1 md:row-end-6 ${panelClasses}`}
-        >
-          2. Equipment Location
-        </div>
+          <div
+            className={`md:col-start-2 md:col-end-4 md:row-start-1 md:row-end-6 ${panelClasses}`}
+          >
+            <GeofenceMap />
+          </div>
         <div
           className={`md:col-start-4 md:col-end-5 md:row-start-1 md:row-end-4 ${panelClasses}`}
         >
