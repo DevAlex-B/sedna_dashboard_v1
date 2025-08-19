@@ -38,6 +38,7 @@ export default function GeofenceMap() {
 
   const startDrawing = () => {
     const map = mapRef.current;
+    if (!map) return;
     const draw = new L.Draw.Polygon(map, { showArea: false });
     draw.enable();
     setDrawing(draw);
@@ -116,9 +117,7 @@ export default function GeofenceMap() {
             center={[-26.11351258111618, 28.139693428835592]}
             zoom={18}
             style={{ height: '100%', width: '100%' }}
-            whenCreated={(map) => {
-              mapRef.current = map;
-            }}
+            ref={mapRef}
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {geofences.map((g) => (
