@@ -138,28 +138,8 @@ export default function GeofenceMap() {
           </MapContainer>
         </div>
       </div>
-      <div className="w-48 ml-2 overflow-y-auto">
-        <h3 className="font-semibold mb-2">Geofences</h3>
-        <ul>
-          {geofences.map((g) => (
-            <li
-              key={g.id}
-              className={`cursor-pointer mb-1 p-1 rounded ${
-                selected === g.id ? 'bg-white/20' : ''
-              }`}
-              onClick={() => setSelected(g.id)}
-            >
-              <span
-                className="inline-block w-3 h-3 mr-2"
-                style={{ backgroundColor: g.color }}
-              ></span>
-              {g.name}
-            </li>
-          ))}
-        </ul>
-      </div>
       {showDialog && (
-        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+        <div className="absolute inset-0 z-[1000] bg-black/50 flex items-center justify-center">
           <div className="bg-white text-black p-4 rounded space-y-2">
             <div>
               <label className="block text-sm">Name</label>

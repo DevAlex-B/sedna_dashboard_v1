@@ -3,13 +3,13 @@ import GeofenceMap from '../components/GeofenceMap';
 
 export default function EquipmentLocation() {
   const panelClasses =
-    "p-4 backdrop-blur-md bg-white/5 border border-white/10 rounded-xl shadow-md text-white";
+    "p-4 backdrop-blur-md bg-white/5 border border-white/10 rounded-xl shadow-md text-white flex flex-col h-full";
 
   return (
     <PageContainer>
       <h1 className="text-2xl font-semibold mb-6">Equipment Location</h1>
       <div
-        className="grid grid-cols-1 gap-4 md:grid-cols-5 md:grid-rows-5 md:h-[500px]"
+        className="grid flex-1 h-full grid-cols-1 gap-4 md:grid-cols-5 md:grid-rows-5"
       >
         <div
           className={`md:col-start-1 md:col-end-2 md:row-start-1 md:row-end-6 ${panelClasses}`}
