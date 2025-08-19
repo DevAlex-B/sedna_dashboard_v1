@@ -1,5 +1,8 @@
 import PageContainer from '../components/PageContainer';
 import GeofenceMap from '../components/GeofenceMap';
+import DistanceKmChart from '../components/DistanceKmChart';
+import TimeInLocationChart from '../components/TimeInLocationChart';
+import locationData from '../location_data.json';
 
 export default function EquipmentLocation() {
   const panelClasses =
@@ -29,12 +32,18 @@ export default function EquipmentLocation() {
         <div
           className={`md:col-start-5 md:col-end-6 md:row-start-1 md:row-end-4 ${panelClasses}`}
         >
-          4. Distance - km
+          <h2 className="mb-2 font-medium">Distance - km</h2>
+          <div className="flex-1 h-full min-h-0">
+            <DistanceKmChart data={locationData} />
+          </div>
         </div>
         <div
           className={`md:col-start-4 md:col-end-6 md:row-start-4 md:row-end-6 ${panelClasses}`}
         >
-          5. Distance - km
+          <h2 className="mb-2 font-medium">Time in Location (min)</h2>
+          <div className="flex-1 h-full min-h-0">
+            <TimeInLocationChart data={locationData} />
+          </div>
         </div>
       </div>
     </PageContainer>
