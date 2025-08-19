@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Polygon } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
+import 'leaflet-draw';
 
 function randomColor() {
   return '#' + Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
