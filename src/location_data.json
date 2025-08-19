@@ -1,0 +1,62 @@
+[
+  {
+    "equipment": "Track Dozer",
+    "time_in_location_minutes": 30,
+    "distance_km": 2890
+  },
+  {
+    "equipment": "Backhoe Loader",
+    "time_in_location_minutes": 10,
+    "distance_km": 1765
+  },
+  {
+    "equipment": "Mobile Crane",
+    "time_in_location_minutes": 5,
+    "distance_km": 4330
+  },
+  {
+    "equipment": "Diesel Bowser",
+    "time_in_location_minutes": 20,
+    "distance_km": 3105
+  },
+  {
+    "equipment": "Articulated Dump Truck",
+    "time_in_location_minutes": 30,
+    "distance_km": 2280
+  },
+  {
+    "equipment": "Excavator",
+    "time_in_location_minutes": 30,
+    "distance_km": 3995
+  },
+  {
+    "equipment": "Grader",
+    "time_in_location_minutes": 10,
+    "distance_km": 1420
+  },
+  {
+    "equipment": "Wheel Loader",
+    "time_in_location_minutes": 10,
+    "distance_km": 3615
+  },
+  {
+    "equipment": "Mobile Lighting Plant",
+    "time_in_location_minutes": 20,
+    "distance_km": 2510
+  },
+  {
+    "equipment": "Mobile de-watering pump",
+    "time_in_location_minutes": 20,
+    "distance_km": 4215
+  },
+  {
+    "equipment": "Wheel dozer",
+    "time_in_location_minutes": 15,
+    "distance_km": 1980
+  },
+  {
+    "equipment": "Service trucks",
+    "time_in_location_minutes": 75,
+    "distance_km": 3335
+  }
+]
