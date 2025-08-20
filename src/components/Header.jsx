@@ -37,11 +37,13 @@ export default function Header() {
         </button>
         <button
           onClick={logout}
-          className="px-3 py-1.5 flex items-center rounded-full text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-focus text-sm"
+          className="hidden md:flex px-3 py-1.5 items-center rounded-full text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-focus text-sm"
         >
           Logout <LogOut className="w-4 h-4 ml-2" />
         </button>
-        <FullscreenToggle />
+        <div className="hidden md:block">
+          <FullscreenToggle />
+        </div>
         <ThemeToggle />
       </div>
       <MobileNav open={mobileOpen} onClose={() => setMobileOpen(false)} />
