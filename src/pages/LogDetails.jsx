@@ -3,6 +3,7 @@ import PageContainer from '../components/PageContainer';
 import TimeRangeSelector, { ranges } from '../components/TimeRangeSelector';
 import LogDetailsTable from '../components/LogDetailsTable';
 import VisitorLogsTable from '../components/VisitorLogsTable';
+import GeofencesTable from '../components/GeofencesTable';
 
 const panelClasses =
   'p-4 h-full backdrop-blur-md bg-white/5 border border-white/10 rounded-xl shadow-md text-gray-900 dark:text-white';
@@ -10,7 +11,8 @@ const panelClasses =
 export default function LogDetails() {
   const [range, setRange] = useState(ranges[1]);
   const [counts, setCounts] = useState({ visitors: 0, dashboard: 0 });
-  const [data, setData] = useState([]);
+  const [equipmentData, setEquipmentData] = useState([]);
+  const [geofenceData, setGeofenceData] = useState([]);
   const [visitorData, setVisitorData] = useState([]);
   const [sortBy, setSortBy] = useState(null);
   const [sortDir, setSortDir] = useState('none');
@@ -25,14 +27,17 @@ export default function LogDetails() {
         start.setDate(end.getDate() - range.value);
       }
       try {
-        const [cRes, dRes] = await Promise.all([
+        const [cRes, dRes, gRes] = await Promise.all([
           fetch(`/api/user_counts.php?start=${start.toISOString()}&end=${end.toISOString()}`),
           fetch(`/api/equipment_status.php?start=${start.toISOString()}&end=${end.toISOString()}`),
+          fetch(`/api/geofences.php?start=${start.toISOString()}&end=${end.toISOString()}`),
         ]);
         const cJson = await cRes.json();
         const dJson = await dRes.json();
+        const gJson = await gRes.json();
         setCounts({ visitors: cJson.visitors || 0, dashboard: cJson.dashboard || 0 });
-        setData(dJson);
+        setEquipmentData(dJson);
+        setGeofenceData(gJson);
       } catch (e) {
         console.error(e);
       }
@@ -97,8 +102,12 @@ export default function LogDetails() {
             />
           </div>
           <div className={`${panelClasses} flex flex-col`}>
+            <h2 className="mb-2 font-medium">Geofences</h2>
+            <GeofencesTable data={geofenceData} />
+          </div>
+          <div className={`${panelClasses} flex flex-col lg:col-span-2`}>
             <h2 className="mb-2 font-medium">Equipment Logs</h2>
-            <LogDetailsTable data={data} />
+            <LogDetailsTable data={equipmentData} />
           </div>
         </div>
       </div>

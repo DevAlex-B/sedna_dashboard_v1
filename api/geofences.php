@@ -7,10 +7,23 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
   case 'GET':
-    $result = $conn->query("SELECT id, name, color, coordinates FROM geofences ORDER BY id");
+    $start = $_GET['start'] ?? null;
+    $end = $_GET['end'] ?? null;
+
+    if ($start && $end) {
+      $stmt = $conn->prepare("SELECT id, name, color, coordinates, created_at FROM geofences WHERE created_at BETWEEN ? AND ? ORDER BY created_at DESC");
+      $stmt->bind_param('ss', $start, $end);
+      $stmt->execute();
+      $result = $stmt->get_result();
+    } else {
+      $result = $conn->query("SELECT id, name, color, coordinates, created_at FROM geofences ORDER BY created_at DESC");
+    }
     $data = [];
     while ($row = $result->fetch_assoc()) {
       $data[] = $row;
+    }
+    if (isset($stmt)) {
+      $stmt->close();
     }
     echo json_encode($data);
     break;
