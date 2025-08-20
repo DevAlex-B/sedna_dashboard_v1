@@ -13,7 +13,10 @@ export default function InspectionHistoryTable({ data }) {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, i) => (
+          {data
+            .slice()
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+            .map((row, i) => (
             <tr key={i} className="odd:bg-white/5">
               <td className="p-2">{row.equipment}</td>
               <td className="p-2">

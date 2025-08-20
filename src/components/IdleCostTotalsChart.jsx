@@ -39,11 +39,7 @@ export default function IdleCostTotalsChart({ data = [] }) {
         plugins: {
           legend: { display: false },
           datalabels: {
-            anchor: 'end',
-            align: 'end',
-            offset: 4,
-            color: theme === 'dark' ? '#e5e7eb' : '#374151',
-            formatter: (value) => numberFormatter.format(value),
+            display: false,
           },
         },
         scales: {

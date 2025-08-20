@@ -24,9 +24,10 @@ export default function EquipmentStatus() {
       }
       try {
         const res = await fetch(
-          `/api/equipment_status.php?start=${start.toISOString()}&end=${end.toISOString()}`
+          `/api/equipment_status.php?start=${start.toISOString()}&end=${end.toISOString()}&_=${Date.now()}`
         );
         const json = await res.json();
+        json.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setData(json);
       } catch (e) {
         console.error(e);

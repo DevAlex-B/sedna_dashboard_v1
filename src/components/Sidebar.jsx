@@ -68,7 +68,7 @@ export default function Sidebar() {
               <img src={formQr} alt="Form QR code" className="w-24 h-24" />
               <span className="mt-2 text-xs text-muted">Form QR</span>
             </div>
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center mt-4">
               <img src={qr} alt="Dashboard QR code" className="w-24 h-24" />
               <span className="mt-2 text-xs text-muted">Dashboard QR</span>
             </div>

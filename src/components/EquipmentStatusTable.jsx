@@ -38,20 +38,23 @@ export default function EquipmentStatusTable({ data }) {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, i) => (
-            <tr key={i} className="odd:bg-white/5">
-              <td className="p-2">{row.equipment}</td>
-              {days.map((d) => (
-                <td key={d.key} className="p-2">
-                  <span
-                    className={`block w-3 h-3 mx-auto rounded-full ${statusColor(
-                      row[d.key]
-                    )}`}
-                  />
-                </td>
-              ))}
-            </tr>
-          ))}
+          {data
+            .slice()
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+            .map((row, i) => (
+              <tr key={i} className="odd:bg-white/5">
+                <td className="p-2">{row.equipment}</td>
+                {days.map((d) => (
+                  <td key={d.key} className="p-2">
+                    <span
+                      className={`block w-3 h-3 mx-auto rounded-full ${statusColor(
+                        row[d.key]
+                      )}`}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
