@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
+import FullscreenToggle from './FullscreenToggle';
 import { useAuth } from '../context/AuthContext';
 import { Menu, FileText, LifeBuoy, LogOut } from 'lucide-react';
 import MobileNav from './MobileNav';
@@ -40,6 +41,7 @@ export default function Header() {
         >
           Logout <LogOut className="w-4 h-4 ml-2" />
         </button>
+        <FullscreenToggle />
         <ThemeToggle />
       </div>
       <MobileNav open={mobileOpen} onClose={() => setMobileOpen(false)} />
