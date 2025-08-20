@@ -72,7 +72,10 @@ export default function IdleCostTotalsChart({ data = [] }) {
 
   return (
     <div className="relative w-full h-full">
-      <canvas ref={canvasRef} className="w-full h-full" />
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full"
+      />
     </div>
   );
 }
