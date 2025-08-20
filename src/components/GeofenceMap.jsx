@@ -28,7 +28,7 @@ export default function GeofenceMap({ equipment = [] }) {
   const [showDialog, setShowDialog] = useState(false);
   const [newData, setNewData] = useState({ name: '', color: randomColor(), coords: [] });
   const [toast, setToast] = useState('');
-  const [zoom, setZoom] = useState(30);
+  const [zoom, setZoom] = useState(60);
 
   const showToast = (msg) => {
     setToast(msg);
@@ -73,7 +73,7 @@ export default function GeofenceMap({ equipment = [] }) {
 
   const getIcon = (name) => {
     const baseSize = 40;
-    const scale = zoom / 18;
+    const scale = zoom / 40;
     const size = baseSize * scale;
     const url = iconMap[name] || serviceTruck;
     return L.icon({
