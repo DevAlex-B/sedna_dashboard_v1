@@ -32,7 +32,6 @@ export default function DistanceKmChart({ data = [] }) {
             data: values,
             backgroundColor: colors,
             borderRadius: 6,
-            maxBarThickness: 40,
           },
         ],
       },
@@ -40,7 +39,7 @@ export default function DistanceKmChart({ data = [] }) {
         indexAxis: 'y',
         responsive: true,
         maintainAspectRatio: false,
-        layout: { padding: { right: 16, top: 8 } },
+        layout: { padding: { right: 24, top: 16 } },
         animation: { duration: 500, easing: 'easeOutQuart' },
         plugins: {
           legend: { display: false },
