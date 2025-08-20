@@ -1,15 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Polygon } from 'react-leaflet';
+import { MapContainer, TileLayer, Polygon, Marker, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import 'leaflet-draw';
 
+import trackDozer from '../assets/eq_icons/Track Dozer.svg';
+import backhoeLoader from '../assets/eq_icons/Backhoe Loader.svg';
+import dumpTruck from '../assets/eq_icons/Articulated Dump Truck.svg';
+import dieselBowser from '../assets/eq_icons/Diesel Bowser.svg';
+import excavator from '../assets/eq_icons/Excavator.svg';
+import grader from '../assets/eq_icons/Motor Grader.svg';
+import wheelLoader from '../assets/eq_icons/Wheel Loader.svg';
+import pump from '../assets/eq_icons/FEL Water Load.svg';
+import wheelDozer from '../assets/eq_icons/Wheel Dozer.svg';
+import serviceTruck from '../assets/eq_icons/Service Truck.svg';
+
 function randomColor() {
   return '#' + Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
 }
 
-export default function GeofenceMap() {
+export default function GeofenceMap({ equipment = [] }) {
   const mapRef = useRef(null);
   const [geofences, setGeofences] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -17,6 +28,7 @@ export default function GeofenceMap() {
   const [showDialog, setShowDialog] = useState(false);
   const [newData, setNewData] = useState({ name: '', color: randomColor(), coords: [] });
   const [toast, setToast] = useState('');
+  const [zoom, setZoom] = useState(18);
 
   const showToast = (msg) => {
     setToast(msg);
@@ -35,6 +47,41 @@ export default function GeofenceMap() {
         )
       );
   }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const handleZoom = () => setZoom(map.getZoom());
+    map.on('zoomend', handleZoom);
+    return () => {
+      map.off('zoomend', handleZoom);
+    };
+  }, []);
+
+  const iconMap = {
+    'Track Dozer': trackDozer,
+    'Backhoe Loader': backhoeLoader,
+    'Dump Truck': dumpTruck,
+    'Diesel Bowser': dieselBowser,
+    Excavator: excavator,
+    Grader: grader,
+    'Wheel Loader': wheelLoader,
+    Pump: pump,
+    'Wheel dozer': wheelDozer,
+    'Service trucks': serviceTruck,
+  };
+
+  const getIcon = (name) => {
+    const baseSize = 40;
+    const scale = zoom / 18;
+    const size = baseSize * scale;
+    const url = iconMap[name] || serviceTruck;
+    return L.icon({
+      iconUrl: url,
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size / 2],
+    });
+  };
 
   const startDrawing = () => {
     const map = mapRef.current;
@@ -135,6 +182,30 @@ export default function GeofenceMap() {
                 }}
               />
             ))}
+            {equipment
+              .filter((e) => e.coordinate)
+              .map((e, idx) => {
+                const [lat, lng] = e.coordinate
+                  .split(',')
+                  .map((c) => parseFloat(c.trim()));
+                return (
+                  <Marker
+                    key={`eq-${idx}`}
+                    position={[lat, lng]}
+                    icon={getIcon(e.equipment)}
+                    zIndexOffset={1000}
+                  >
+                    <Tooltip direction="top" opacity={1} permanent={false}>
+                      <div className="text-xs">
+                        <div>{e.equipment}</div>
+                        <div>Operator: {e.operator}</div>
+                        <div>Status: {e.current_status}</div>
+                        <div>{new Date(e.created_at).toLocaleString()}</div>
+                      </div>
+                    </Tooltip>
+                  </Marker>
+                );
+              })}
           </MapContainer>
         </div>
       </div>
