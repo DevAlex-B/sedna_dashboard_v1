@@ -28,7 +28,7 @@ export default function GeofenceMap({ equipment = [] }) {
   const [showDialog, setShowDialog] = useState(false);
   const [newData, setNewData] = useState({ name: '', color: randomColor(), coords: [] });
   const [toast, setToast] = useState('');
-  const [zoom, setZoom] = useState(18);
+  const [zoom, setZoom] = useState(30);
 
   const showToast = (msg) => {
     setToast(msg);
