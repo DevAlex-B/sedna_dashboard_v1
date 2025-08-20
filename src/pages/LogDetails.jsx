@@ -10,7 +10,7 @@ const panelClasses =
 
 export default function LogDetails() {
   const [range, setRange] = useState(ranges[1]);
-  const [counts, setCounts] = useState({ visitors: 0, dashboard: 0 });
+  const [counts, setCounts] = useState({ visitors: 0, dashboard: 0, allTime: 0 });
   const [equipmentData, setEquipmentData] = useState([]);
   const [geofenceData, setGeofenceData] = useState([]);
   const [visitorData, setVisitorData] = useState([]);
@@ -35,7 +35,11 @@ export default function LogDetails() {
         const cJson = await cRes.json();
         const dJson = await dRes.json();
         const gJson = await gRes.json();
-        setCounts({ visitors: cJson.visitors || 0, dashboard: cJson.dashboard || 0 });
+        setCounts({
+          visitors: cJson.visitors || 0,
+          dashboard: cJson.dashboard || 0,
+          allTime: cJson.allTime || 0,
+        });
         setEquipmentData(dJson);
         setGeofenceData(gJson);
       } catch (e) {
@@ -81,7 +85,7 @@ export default function LogDetails() {
           <h1 className="text-2xl font-semibold">Log Details</h1>
           <TimeRangeSelector value={range} onChange={setRange} />
         </div>
-        <div className="grid grid-cols-1 gap-4 mb-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 mb-4 lg:grid-cols-3">
           <div className={`${panelClasses} flex flex-col items-center justify-center`}>
             <h2 className="mb-2 font-medium">Visitors</h2>
             <p className="text-4xl font-bold">{counts.visitors}</p>
@@ -89,6 +93,10 @@ export default function LogDetails() {
           <div className={`${panelClasses} flex flex-col items-center justify-center`}>
             <h2 className="mb-2 font-medium">Dashboard Visitors</h2>
             <p className="text-4xl font-bold">{counts.dashboard}</p>
+          </div>
+          <div className={`${panelClasses} flex flex-col items-center justify-center`}>
+            <h2 className="mb-2 font-medium">All Time Visitors</h2>
+            <p className="text-4xl font-bold">{counts.allTime}</p>
           </div>
         </div>
         <div className="grid flex-1 grid-cols-1 gap-4 lg:grid-cols-2">
