@@ -96,16 +96,16 @@ export default function GeofenceMap() {
     <div className="flex h-full relative">
       <div className="flex flex-col flex-1">
         <div className="mb-2 space-x-2">
-          <button className="px-2 py-1 bg-blue-600 rounded" onClick={startDrawing}>
+          <button className="px-2 py-1 bg-blue-600 rounded text-white" onClick={startDrawing}>
             New Geofence
           </button>
           {drawing && (
-            <button className="px-2 py-1 bg-gray-600 rounded" onClick={undoLast}>
+            <button className="px-2 py-1 bg-gray-600 rounded text-white" onClick={undoLast}>
               Undo
             </button>
           )}
           <button
-            className="px-2 py-1 bg-red-600 rounded disabled:opacity-50"
+            className="px-2 py-1 bg-red-600 rounded text-white disabled:opacity-50"
             onClick={deleteSelected}
             disabled={!selected}
           >

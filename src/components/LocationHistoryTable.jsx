@@ -4,7 +4,7 @@ export default function LocationHistoryTable({ data }) {
   return (
     <div className="flex-1 overflow-auto">
       <table className="w-full text-sm">
-        <thead className="sticky top-0 bg-white/10">
+        <thead className="sticky top-0 bg-gray-100 dark:bg-white/10">
           <tr>
             <th className="text-left p-2">Equipment</th>
             <th className="text-left p-2">Status</th>
@@ -13,7 +13,7 @@ export default function LocationHistoryTable({ data }) {
         </thead>
         <tbody>
           {data.map((row, idx) => (
-            <tr key={idx} className="odd:bg-white/5">
+            <tr key={idx} className="odd:bg-gray-50 dark:odd:bg-white/5">
               <td className="p-2">{row.equipment}</td>
               <td className="p-2">{row.current_status}</td>
               <td className="p-2">{new Date(row.created_at).toLocaleString()}</td>
