@@ -54,7 +54,7 @@ export default function EquipmentLocation() {
           <LocationHistoryTable data={history} />
         </div>
         <div
-          className={`md:col-start-2 md:col-end-4 md:row-start-1 md:row-end-6 ${panelClasses}`}
+          className={`md:col-start-2 md:col-end-4 md:row-start-1 md:row-end-6 ${panelClasses} h-96 md:h-full`}
         >
           <GeofenceMap equipment={history} />
         </div>
@@ -76,7 +76,7 @@ export default function EquipmentLocation() {
           className={`md:col-start-4 md:col-end-6 md:row-start-4 md:row-end-6 ${panelClasses}`}
         >
           <h2 className="mb-2 font-medium">Time in Location (min)</h2>
-          <div className="flex-1 h-full min-h-0">
+          <div className="h-64 md:flex-1 md:h-full md:min-h-0">
             <TimeInLocationChart data={locationData} />
           </div>
         </div>

@@ -84,7 +84,7 @@ export default function Finance() {
           </div>
           <div className={`lg:col-start-5 lg:row-start-1 ${panelClasses} flex flex-col`}>
             <h2 className="font-medium">Downtime</h2>
-            <div className="flex-1 h-full min-h-0 mt-2">
+            <div className="h-64 md:flex-1 md:h-full md:min-h-0 mt-2">
               <DowntimeGaugeChart />
             </div>
           </div>
@@ -92,7 +92,7 @@ export default function Finance() {
             className={`lg:col-start-1 lg:row-start-2 lg:col-span-2 lg:row-span-2 ${panelClasses} flex flex-col`}
           >
             <h2 className="font-medium">Fault Shutdowns</h2>
-            <div className="flex-1 h-full min-h-0 mt-2">
+            <div className="h-64 md:flex-1 md:h-full md:min-h-0 mt-2">
               <FaultShutdownsChart data={rangeData.fault_shutdowns} />
             </div>
           </div>
@@ -100,7 +100,7 @@ export default function Finance() {
             className={`lg:col-start-1 lg:row-start-4 lg:col-span-2 lg:row-span-2 ${panelClasses} flex flex-col`}
           >
             <h2 className="font-medium">Idle Cost Totals</h2>
-            <div className="flex-1 h-full min-h-0 mt-2">
+            <div className="h-64 md:flex-1 md:h-full md:min-h-0 mt-2">
               <IdleCostTotalsChart data={rangeData.idle_cost_totals} />
             </div>
           </div>
@@ -108,7 +108,7 @@ export default function Finance() {
             className={`lg:col-start-3 lg:row-start-2 lg:col-span-3 lg:row-span-1 ${panelClasses} flex flex-col`}
           >
             <h2 className="font-medium">Downtime vs. Operational Time</h2>
-            <div className="flex-1 h-full min-h-0 mt-2">
+            <div className="h-64 md:flex-1 md:h-full md:min-h-0 mt-2">
               <DowntimeVsOperationalChart />
             </div>
           </div>
@@ -116,7 +116,7 @@ export default function Finance() {
             className={`lg:col-start-3 lg:row-start-3 lg:col-span-3 lg:row-span-3 ${panelClasses} flex flex-col`}
           >
             <h2 className="font-medium">Equipment Utilisation Efficiency</h2>
-            <div className="flex-1 h-full min-h-0 mt-2">
+            <div className="h-64 md:flex-1 md:h-full md:min-h-0 mt-2">
               <EquipmentUtilizationChart data={rangeData.utilization} />
             </div>
           </div>
