@@ -13,11 +13,11 @@ export default function CurrentStatusSummary({ counts }) {
   return (
     <div className="flex flex-col justify-around h-full">
       {items.map((item) => (
-        <div key={item.title} className="flex items-center justify-center space-x-4">
-          <img src={item.icon} alt={item.title} className="h-12 w-12 object-contain" />
+        <div key={item.title} className="flex items-center justify-center space-x-6">
+          <img src={item.icon} alt={item.title} className="h-16 w-16 object-contain" />
           <div className="text-center">
-            <div className="text-sm">{item.title}</div>
-            <div className="text-xl font-semibold">{item.value}</div>
+            <div className="text-lg font-medium">{item.title}</div>
+            <div className="text-3xl font-semibold">{item.value}</div>
           </div>
         </div>
       ))}
