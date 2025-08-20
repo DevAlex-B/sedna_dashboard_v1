@@ -62,13 +62,15 @@ export default function Sidebar() {
       {/* Bottom area (no border here) */}
       <div className="p-4 flex flex-col items-center space-y-4">
         {!collapsed && (
-          <div className="flex flex-col items-center space-y-4">
+          <div className="flex flex-col items-center space-y-12">
             <h3 className="text-3xl font-bold">Scan me</h3>
+
             <div className="flex flex-col items-center">
               <img src={formQr} alt="Form QR code" className="w-24 h-24" />
               <span className="mt-2 text-xs text-muted">Form QR</span>
             </div>
-            <div className="flex flex-col items-center mt-4">
+
+            <div className="flex flex-col items-center">
               <img src={qr} alt="Dashboard QR code" className="w-24 h-24" />
               <span className="mt-2 text-xs text-muted">Dashboard QR</span>
             </div>
