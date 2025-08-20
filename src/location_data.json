@@ -20,11 +20,6 @@
     "distance_km": 3105
   },
   {
-    "equipment": "Articulated Dump Truck",
-    "time_in_location_minutes": 30,
-    "distance_km": 2280
-  },
-  {
     "equipment": "Excavator",
     "time_in_location_minutes": 30,
     "distance_km": 3995
@@ -40,12 +35,7 @@
     "distance_km": 3615
   },
   {
-    "equipment": "Mobile Lighting Plant",
-    "time_in_location_minutes": 20,
-    "distance_km": 2510
-  },
-  {
-    "equipment": "Mobile de-watering pump",
+    "equipment": "Pump",
     "time_in_location_minutes": 20,
     "distance_km": 4215
   },
