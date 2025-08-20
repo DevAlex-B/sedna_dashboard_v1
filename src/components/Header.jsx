@@ -25,7 +25,7 @@ export default function Header() {
       </button>
       <div className="flex items-center space-x-2 ml-auto">
         <a
-          href="https://sa.digirockinnovations.com/equipment_form"
+          href="https://sa-forms.digirockinnovations.com/equipment_form"
           target="_blank"
           rel="noopener noreferrer"
           className="px-3 py-1.5 flex items-center rounded-full text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-focus text-sm"
