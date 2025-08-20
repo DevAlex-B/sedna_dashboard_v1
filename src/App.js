@@ -6,7 +6,9 @@ function App() {
   useEffect(() => {
     const id = setInterval(() => {
       // Reload from cache to minimize any visible flicker
-      window.location.reload(false);
+      if (!window.isEditingGeofence) {
+        window.location.reload(false);
+      }
     }, 30000);
 
     return () => clearInterval(id);

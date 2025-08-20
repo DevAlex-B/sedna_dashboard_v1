@@ -86,15 +86,23 @@ export default function GeofenceMap({ equipment = [] }) {
   const startDrawing = () => {
     const map = mapRef.current;
     if (!map) return;
+    window.isEditingGeofence = true;
     const draw = new L.Draw.Polygon(map, { showArea: false });
     draw.enable();
     setDrawing(draw);
+    let created = false;
     map.once(L.Draw.Event.CREATED, (e) => {
+      created = true;
       draw.disable();
       setDrawing(null);
       const coords = e.layer.getLatLngs()[0].map((ll) => [ll.lat, ll.lng]);
       setNewData({ name: '', color: randomColor(), coords });
       setShowDialog(true);
+    });
+    map.once(L.Draw.Event.DRAWSTOP, () => {
+      if (!created) {
+        window.isEditingGeofence = false;
+      }
     });
   };
 
@@ -121,6 +129,7 @@ export default function GeofenceMap({ equipment = [] }) {
           { id: data.id, name: newData.name, color: newData.color, coordinates: newData.coords },
         ]);
         setShowDialog(false);
+        window.isEditingGeofence = false;
         showToast('Geofence saved');
       })
       .catch(() => showToast('Error saving'));
@@ -230,7 +239,13 @@ export default function GeofenceMap({ equipment = [] }) {
               />
             </div>
             <div className="flex justify-end space-x-2">
-              <button className="px-2 py-1 bg-gray-300" onClick={() => setShowDialog(false)}>
+              <button
+                className="px-2 py-1 bg-gray-300"
+                onClick={() => {
+                  setShowDialog(false);
+                  window.isEditingGeofence = false;
+                }}
+              >
                 Cancel
               </button>
               <button
