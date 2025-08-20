@@ -5,6 +5,7 @@ import NavButton from './NavButton';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import qr from '../assets/dashboard_qr.png';
+import formQr from '../assets/form.png';
 import driLogoLight from '../assets/DRi_logo_v3_white (2).png';
 import driLogoDark from '../assets/DRi_Logo_dark.png';
 import logoLight from '../assets/sedna_logo.png';
@@ -60,15 +61,20 @@ export default function Sidebar() {
 
       {/* Bottom area (no border here) */}
       <div className="p-4 flex flex-col items-center space-y-4">
-        {/* QR + label (expanded only) */}
         {!collapsed && (
-          <div className="flex flex-col items-center">
-            <img src={qr} alt="Dashboard QR code" className="w-24 h-24" />
-            <span className="mt-2 text-xs text-muted">Dashboard QR</span>
+          <div className="flex flex-col items-center space-y-4">
+            <h3 className="text-md font-medium">Scan me</h3>
+            <div className="flex flex-col items-center">
+              <img src={formQr} alt="Form QR code" className="w-24 h-24" />
+              <span className="mt-2 text-xs text-muted">Form QR</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <img src={qr} alt="Dashboard QR code" className="w-24 h-24" />
+              <span className="mt-2 text-xs text-muted">Dashboard QR</span>
+            </div>
           </div>
         )}
 
-        {/* Powered by (expanded only) — gets the thin top border */}
         {!collapsed && (
           <div className="w-full border-t border-border pt-4">
             <div className="flex items-center justify-center space-x-2">

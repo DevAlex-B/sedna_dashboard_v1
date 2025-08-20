@@ -78,8 +78,11 @@ export default function TimeInLocationChart({ data = [] }) {
   }, [data, theme]);
 
   return (
-    <div className="relative w-full h-full">
-      <canvas ref={canvasRef} className="w-full h-full" />
+    <div className="relative w-full h-full overflow-hidden">
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full"
+      />
     </div>
   );
 }
