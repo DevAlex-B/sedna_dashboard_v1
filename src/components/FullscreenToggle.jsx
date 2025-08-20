@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import msDark from '../assets/ms_dark.png';
-import msLight from '../assets/ms_light.png';
-import fsDark from '../assets/fs_dark.png';
-import fsLight from '../assets/fs_light.png';
+import msDark from '../assets/ms_light.png';
+import msLight from '../assets/ms_dark.png';
+import fsDark from '../assets/fs_light.png';
+import fsLight from '../assets/fs_dark.png';
 
 export default function FullscreenToggle() {
   const { theme } = useTheme();
