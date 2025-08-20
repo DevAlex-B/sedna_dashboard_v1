@@ -6,7 +6,8 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem('user');
+    const stored =
+      localStorage.getItem('user') || sessionStorage.getItem('user');
     return stored ? { ...JSON.parse(stored), authenticated: false } : null;
   });
   const [authChecked, setAuthChecked] = useState(false);
@@ -34,11 +35,13 @@ export const AuthProvider = ({ children }) => {
         } else {
           setUser(null);
           localStorage.removeItem('user');
+          sessionStorage.removeItem('user');
         }
       } catch (e) {
         console.error(e);
         setUser(null);
         localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
       } finally {
         setAuthChecked(true);
       }
@@ -61,6 +64,7 @@ export const AuthProvider = ({ children }) => {
       }
       const userData = { username, authenticated: true };
       setUser(userData);
+      sessionStorage.setItem('user', JSON.stringify(userData));
       if (remember) {
         localStorage.setItem('user', JSON.stringify(userData));
       } else {
@@ -84,6 +88,7 @@ export const AuthProvider = ({ children }) => {
     }
     const userData = { fullName, email, visitor: true, authenticated: true };
     setUser(userData);
+    sessionStorage.setItem('user', JSON.stringify(userData));
     localStorage.setItem('user', JSON.stringify(userData));
     return { success: true };
   };
@@ -101,6 +106,7 @@ export const AuthProvider = ({ children }) => {
     }
     setUser(null);
     localStorage.removeItem('user');
+    sessionStorage.removeItem('user');
     navigate('/login');
   };
 
