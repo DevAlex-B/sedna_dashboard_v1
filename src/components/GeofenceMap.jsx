@@ -159,12 +159,13 @@ export default function GeofenceMap({ equipment = [] }) {
             Delete
           </button>
         </div>
-        <div className="flex-1">
+        <div className="flex-1 rounded-lg overflow-hidden">
           <MapContainer
             center={[-26.11351258111618, 28.139693428835592]}
             zoom={18}
             style={{ height: '100%', width: '100%' }}
             ref={mapRef}
+            className="h-full w-full"
           >
             <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
             {geofences.map((g) => (

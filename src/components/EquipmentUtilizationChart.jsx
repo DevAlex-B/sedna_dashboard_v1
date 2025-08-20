@@ -59,11 +59,7 @@ export default function EquipmentUtilizationChart({ data = [] }) {
             },
           },
           datalabels: {
-            anchor: 'end',
-            align: 'end',
-            offset: 4,
-            formatter: (value) => `${value}%`,
-            color: theme === 'dark' ? '#e5e7eb' : '#374151',
+            display: false,
           },
         },
         scales: {

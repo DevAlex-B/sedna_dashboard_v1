@@ -11,8 +11,9 @@ export default function DowntimeChart() {
   useEffect(() => {
     const fetchLatest = async () => {
       try {
-        const res = await fetch('/api/equipment_status.php?latest=1');
+        const res = await fetch(`/api/equipment_status.php?latest=1&_=${Date.now()}`);
         const json = await res.json();
+        json.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setLatest(json[0] || null);
       } catch (e) {
         console.error(e);
