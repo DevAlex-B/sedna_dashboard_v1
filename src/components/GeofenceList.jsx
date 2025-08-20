@@ -11,7 +11,7 @@ export default function GeofenceList() {
   }, []);
 
   return (
-    <div className="flex-1 overflow-auto space-y-2">
+    <div className="space-y-2 md:flex-1 md:overflow-auto">
       {geofences.map((g) => (
         <div key={g.id} className="flex items-center space-x-2">
           <span

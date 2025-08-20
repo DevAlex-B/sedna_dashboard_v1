@@ -159,7 +159,7 @@ export default function GeofenceMap({ equipment = [] }) {
             Delete
           </button>
         </div>
-        <div className="flex-1 rounded-lg overflow-hidden">
+        <div className="h-64 md:flex-1 md:h-auto rounded-lg overflow-hidden">
           <MapContainer
             center={[-26.11351258111618, 28.139693428835592]}
             zoom={18}
