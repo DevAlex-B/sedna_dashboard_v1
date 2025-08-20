@@ -11,12 +11,17 @@ switch ($method) {
     $end = $_GET['end'] ?? null;
 
     if ($start && $end) {
-      $stmt = $conn->prepare("SELECT id, name, color, coordinates, created_at FROM geofences WHERE created_at BETWEEN ? AND ? ORDER BY created_at DESC");
+      $stmt = $conn->prepare(
+        "SELECT id, name, color, coordinates, created_at FROM geofences " .
+        "WHERE created_at BETWEEN ? AND ? ORDER BY created_at DESC"
+      );
       $stmt->bind_param('ss', $start, $end);
       $stmt->execute();
       $result = $stmt->get_result();
     } else {
-      $result = $conn->query("SELECT id, name, color, coordinates, created_at FROM geofences ORDER BY created_at DESC");
+      $result = $conn->query(
+        "SELECT id, name, color, coordinates, created_at FROM geofences ORDER BY created_at DESC"
+      );
     }
     $data = [];
     while ($row = $result->fetch_assoc()) {
