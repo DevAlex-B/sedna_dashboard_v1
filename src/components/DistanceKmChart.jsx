@@ -8,11 +8,8 @@ export default function DistanceKmChart({ data = [] }) {
   const { theme } = useTheme();
 
   useEffect(() => {
-    const parent = canvasRef.current?.parentElement;
     const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx || !parent) return;
-
-    canvasRef.current.height = parent.clientHeight;
+    if (!ctx) return;
 
     const labels = data.map((d) => d.equipment);
     const values = data.map((d) => d.distance_km);
@@ -66,18 +63,7 @@ export default function DistanceKmChart({ data = [] }) {
       },
     });
 
-    chartRef.current.resize(parent.clientWidth, parent.clientHeight);
-
-    const handleResize = () => {
-      const parent = canvasRef.current?.parentElement;
-      if (!parent || !chartRef.current) return;
-      canvasRef.current.height = parent.clientHeight;
-      chartRef.current.resize(parent.clientWidth, parent.clientHeight);
-    };
-    window.addEventListener('resize', handleResize);
-
     return () => {
-      window.removeEventListener('resize', handleResize);
       chartRef.current?.destroy();
       chartRef.current = null;
     };
