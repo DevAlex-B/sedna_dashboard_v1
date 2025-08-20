@@ -9,7 +9,7 @@ import DowntimeGaugeChart from '../components/DowntimeGaugeChart';
 import DowntimeVsOperationalChart from '../components/DowntimeVsOperationalChart';
 
 const panelClasses =
-  'p-4 h-full backdrop-blur-md bg-white/5 border border-white/10 rounded-xl shadow-md text-gray-900 dark:text-white';
+  'p-4 h-full overflow-hidden backdrop-blur-md bg-white/5 border border-white/10 rounded-xl shadow-md text-gray-900 dark:text-white';
 
 const currencyFormatter = new Intl.NumberFormat('en-ZA', {
   style: 'currency',
@@ -49,7 +49,7 @@ export default function Finance() {
           <h1 className="text-2xl font-semibold">Finance</h1>
           <TimeRangeSelector value={range} onChange={setRange} />
         </div>
-        <div className="grid flex-1 min-h-0 gap-4 grid-cols-1 lg:grid-cols-5 lg:grid-rows-5">
+        <div className="grid flex-1 h-full min-h-0 gap-4 grid-cols-1 lg:grid-cols-5 lg:grid-rows-5">
           <div className={`lg:col-start-1 lg:row-start-1 ${panelClasses} flex flex-col`}>
             <h2 className="font-medium">Idle Cost</h2>
             <div className="flex-1 flex items-center justify-center">
