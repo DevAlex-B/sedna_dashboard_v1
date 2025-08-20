@@ -28,13 +28,14 @@ export default function TimeInLocationChart({ data = [] }) {
             data: values,
             backgroundColor: '#036EC8',
             borderRadius: 6,
+            maxBarThickness: 40,
           },
         ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        layout: { padding: { top: 25, right: 16 } },
+        layout: { padding: { top: 16, right: 8 } },
         animation: { duration: 500, easing: 'easeOutQuart' },
         plugins: {
           legend: {
@@ -43,8 +44,9 @@ export default function TimeInLocationChart({ data = [] }) {
               color: theme === 'dark' ? '#e5e7eb' : '#374151',
               usePointStyle: true,
               pointStyle: 'rectRounded',
-              boxWidth: 12,
-              boxHeight: 12,
+              boxWidth: 10,
+              boxHeight: 10,
+              font: { size: 11 },
             },
           },
           datalabels: {
