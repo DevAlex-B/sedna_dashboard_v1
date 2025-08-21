@@ -2,9 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import Chart from '../chart';
 
-const formatSAST = (date) =>
-  date.toLocaleString('sv-SE', { timeZone: 'Africa/Johannesburg' });
-
 export default function FeedToPlantChart({ range }) {
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
@@ -21,10 +18,8 @@ export default function FeedToPlantChart({ range }) {
         start.setDate(end.getDate() - range.value);
       }
       try {
-        const startStr = encodeURIComponent(formatSAST(start));
-        const endStr = encodeURIComponent(formatSAST(end));
         const res = await fetch(
-          `/api/feed_to_plant.php?start=${startStr}&end=${endStr}`
+          `/api/feed_to_plant.php?start=${start.toISOString()}&end=${end.toISOString()}`
         );
         const json = await res.json();
         const maxPoints =
