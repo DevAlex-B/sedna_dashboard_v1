@@ -16,9 +16,7 @@ if ($conn->connect_error) {
   exit;
 }
 
-$conn->query("SET time_zone = 'UTC'");
-
-$sql = "SELECT Final_Tails_SG, CONVERT_TZ(sast_timestamp, 'UTC','Africa/Johannesburg') AS sast_timestamp FROM ewon1 WHERE sast_timestamp BETWEEN CONVERT_TZ(?, 'Africa/Johannesburg', 'UTC') AND CONVERT_TZ(?, 'Africa/Johannesburg', 'UTC') ORDER BY sast_timestamp";
+$sql = "SELECT Final_Tails_SG, sast_timestamp FROM ewon1 WHERE sast_timestamp BETWEEN ? AND ? ORDER BY sast_timestamp";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('ss', $start, $end);
 $stmt->execute();
