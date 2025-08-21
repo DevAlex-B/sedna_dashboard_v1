@@ -6,7 +6,10 @@ function App() {
   useEffect(() => {
     const id = setInterval(() => {
       // Reload from cache to minimize any visible flicker
-      if (!window.isEditingGeofence) {
+      if (
+        !window.isEditingGeofence &&
+        !window.location.pathname.startsWith('/login')
+      ) {
         window.location.reload(false);
       }
     }, 30000);
