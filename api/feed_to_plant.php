@@ -16,7 +16,7 @@ if ($conn->connect_error) {
   exit;
 }
 
-$sql = "SELECT Final_Tails_SG, sast_timestamp FROM ewon1 WHERE sast_timestamp BETWEEN CONVERT_TZ(?, 'UTC', @@session.time_zone) AND CONVERT_TZ(?, 'UTC', @@session.time_zone) ORDER BY sast_timestamp";
+$sql = "SELECT Final_Tails_SG, sast_timestamp FROM ewon1 WHERE sast_timestamp BETWEEN ? AND ? ORDER BY sast_timestamp";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('ss', $start, $end);
 $stmt->execute();
