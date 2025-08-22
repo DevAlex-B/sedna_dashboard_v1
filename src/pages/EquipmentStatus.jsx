@@ -5,6 +5,7 @@ import FeedToPlantChart from '../components/FeedToPlantChart';
 import InspectionHistoryTable from '../components/InspectionHistoryTable';
 import EquipmentStatusTable from '../components/EquipmentStatusTable';
 import DowntimeChart from '../components/DowntimeChart';
+import { formatDateForApi } from '../utils/date';
 
 const panelClasses =
   'p-4 h-full backdrop-blur-md bg-white/5 border border-white/10 rounded-xl shadow-md text-gray-900 dark:text-white';
@@ -24,7 +25,7 @@ export default function EquipmentStatus() {
       }
       try {
         const res = await fetch(
-          `/api/equipment_status.php?start=${start.toISOString()}&end=${end.toISOString()}&_=${Date.now()}`
+          `/api/equipment_status.php?start=${formatDateForApi(start)}&end=${formatDateForApi(end)}&_=${Date.now()}`
         );
         const json = await res.json();
         json.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));

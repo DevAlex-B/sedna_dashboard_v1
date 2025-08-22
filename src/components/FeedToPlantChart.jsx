@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import Chart from '../chart';
+import { formatDateForApi } from '../utils/date';
 
 export default function FeedToPlantChart({ range }) {
   const canvasRef = useRef(null);
@@ -19,7 +20,7 @@ export default function FeedToPlantChart({ range }) {
       }
       try {
         const res = await fetch(
-          `/api/feed_to_plant.php?start=${start.toISOString()}&end=${end.toISOString()}`
+          `/api/feed_to_plant.php?start=${formatDateForApi(start)}&end=${formatDateForApi(end)}`
         );
         const json = await res.json();
         const maxPoints =
