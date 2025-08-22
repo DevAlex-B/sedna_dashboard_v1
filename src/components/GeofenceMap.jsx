@@ -29,6 +29,8 @@ export default function GeofenceMap({ equipment = [] }) {
   const [newData, setNewData] = useState({ name: '', color: randomColor(), coords: [] });
   const [toast, setToast] = useState('');
   const [zoom, setZoom] = useState(60);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   const showToast = (msg) => {
     setToast(msg);
@@ -47,6 +49,31 @@ export default function GeofenceMap({ equipment = [] }) {
         )
       );
   }, []);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          searchQuery
+        )}`
+      );
+      const data = await res.json();
+      setSearchResults(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const selectResult = (r) => {
+    const map = mapRef.current;
+    if (map) {
+      map.setView([parseFloat(r.lat), parseFloat(r.lon)], 18);
+    }
+    setSearchQuery(r.display_name);
+    setSearchResults([]);
+  };
 
   useEffect(() => {
     const map = mapRef.current;
@@ -151,7 +178,31 @@ export default function GeofenceMap({ equipment = [] }) {
   return (
     <div className="flex h-full relative">
       <div className="flex flex-col flex-1">
-        <div className="mb-2 space-x-2">
+        <div className="mb-2 flex items-center space-x-2">
+          <div className="relative">
+            <form onSubmit={handleSearch}>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search location"
+                className="px-3 py-1 border rounded-full focus:outline-none"
+              />
+            </form>
+            {searchResults.length > 0 && (
+              <ul className="absolute left-0 right-0 mt-1 max-h-40 overflow-y-auto bg-white border rounded-md z-[1000]">
+                {searchResults.map((r) => (
+                  <li
+                    key={r.place_id}
+                    className="px-3 py-1 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => selectResult(r)}
+                  >
+                    {r.display_name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           <button className="px-2 py-1 bg-blue-600 rounded text-white" onClick={startDrawing}>
             New Geofence
           </button>
