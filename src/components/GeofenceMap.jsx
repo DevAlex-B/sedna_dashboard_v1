@@ -28,7 +28,18 @@ export default function GeofenceMap({ equipment = [] }) {
   const [showDialog, setShowDialog] = useState(false);
   const [newData, setNewData] = useState({ name: '', color: randomColor(), coords: [] });
   const [toast, setToast] = useState('');
-  const [zoom, setZoom] = useState(60);
+
+  const defaultView = {
+    center: [-26.11351258111618, 28.139693428835592],
+    zoom: 18,
+  };
+
+  const [initialView] = useState(() => {
+    const saved = localStorage.getItem('equipmentMapView');
+    return saved ? JSON.parse(saved) : defaultView;
+  });
+
+  const [zoom, setZoom] = useState(initialView.zoom);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -69,7 +80,14 @@ export default function GeofenceMap({ equipment = [] }) {
   const selectResult = (r) => {
     const map = mapRef.current;
     if (map) {
-      map.setView([parseFloat(r.lat), parseFloat(r.lon)], 18);
+      const lat = parseFloat(r.lat);
+      const lon = parseFloat(r.lon);
+      const newCenter = [lat, lon];
+      map.setView(newCenter, 18);
+      localStorage.setItem(
+        'equipmentMapView',
+        JSON.stringify({ center: newCenter, zoom: 18 })
+      );
     }
     setSearchQuery(r.display_name);
     setSearchResults([]);
@@ -78,10 +96,20 @@ export default function GeofenceMap({ equipment = [] }) {
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
-    const handleZoom = () => setZoom(map.getZoom());
-    map.on('zoomend', handleZoom);
+    const saveView = () => {
+      const center = map.getCenter();
+      const z = map.getZoom();
+      setZoom(z);
+      localStorage.setItem(
+        'equipmentMapView',
+        JSON.stringify({ center: [center.lat, center.lng], zoom: z })
+      );
+    };
+    map.on('moveend', saveView);
+    map.on('zoomend', saveView);
     return () => {
-      map.off('zoomend', handleZoom);
+      map.off('moveend', saveView);
+      map.off('zoomend', saveView);
     };
   }, []);
 
@@ -221,8 +249,8 @@ export default function GeofenceMap({ equipment = [] }) {
         </div>
         <div className="h-64 md:flex-1 md:h-auto rounded-lg overflow-hidden">
           <MapContainer
-            center={[-26.11351258111618, 28.139693428835592]}
-            zoom={18}
+            center={initialView.center}
+            zoom={initialView.zoom}
             style={{ height: '100%', width: '100%' }}
             ref={mapRef}
             className="h-full w-full"
