@@ -186,15 +186,15 @@ export default function GeofenceMap({ equipment = [] }) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search location"
-                className="px-3 py-1 border rounded-full focus:outline-none"
+                className="px-3 py-1 border rounded-full focus:outline-none text-black placeholder:text-black"
               />
             </form>
             {searchResults.length > 0 && (
-              <ul className="absolute left-0 right-0 mt-1 max-h-40 overflow-y-auto bg-white border rounded-md z-[1000]">
+              <ul className="absolute left-0 right-0 mt-1 max-h-40 overflow-y-auto bg-white border rounded-md z-[1000] text-black">
                 {searchResults.map((r) => (
                   <li
                     key={r.place_id}
-                    className="px-3 py-1 hover:bg-gray-100 cursor-pointer"
+                    className="px-3 py-1 hover:bg-gray-100 cursor-pointer text-black"
                     onClick={() => selectResult(r)}
                   >
                     {r.display_name}
