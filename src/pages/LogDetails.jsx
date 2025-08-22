@@ -4,6 +4,7 @@ import TimeRangeSelector, { ranges } from '../components/TimeRangeSelector';
 import LogDetailsTable from '../components/LogDetailsTable';
 import VisitorLogsTable from '../components/VisitorLogsTable';
 import GeofencesTable from '../components/GeofencesTable';
+import { formatDateForApi } from '../utils/date';
 
 const panelClasses =
   'p-4 h-full backdrop-blur-md bg-white/5 border border-white/10 rounded-xl shadow-md text-gray-900 dark:text-white';
@@ -28,9 +29,15 @@ export default function LogDetails() {
       }
       try {
         const [cRes, dRes, gRes] = await Promise.all([
-          fetch(`/api/user_counts.php?start=${start.toISOString()}&end=${end.toISOString()}`),
-          fetch(`/api/equipment_status.php?start=${start.toISOString()}&end=${end.toISOString()}`),
-          fetch(`/api/geofences.php?start=${start.toISOString()}&end=${end.toISOString()}`),
+          fetch(
+            `/api/user_counts.php?start=${formatDateForApi(start)}&end=${formatDateForApi(end)}`
+          ),
+          fetch(
+            `/api/equipment_status.php?start=${formatDateForApi(start)}&end=${formatDateForApi(end)}`
+          ),
+          fetch(
+            `/api/geofences.php?start=${formatDateForApi(start)}&end=${formatDateForApi(end)}`
+          ),
         ]);
         const cJson = await cRes.json();
         const dJson = await dRes.json();
